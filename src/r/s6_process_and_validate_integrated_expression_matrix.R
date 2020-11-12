@@ -25,8 +25,8 @@
 # 1. Prepare data
 # ==============================================================================
 
-load("results/main/geo_expr.RData")
-load("results/main/geo_clin.RData")
+load("results/data/geo_expr.RData")
+load("results/data/geo_clin.RData")
 
 
 # Data-metadata congrence
@@ -249,7 +249,7 @@ geo_expr_list %>% purrr::map(dim)
 
 # Save dataset effect corrected data list !!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-save(geo_expr_list, file = str_c(outdir, "geo_expr_list.RData"))
+save(geo_expr_list, file = str_c(out_data, "geo_expr_list.RData"))
 
 #
 # ==============================================================================
@@ -545,7 +545,7 @@ geo_clin_list %>% purrr::map(dim)
 
 # Save qc metrics associated with dataset effect correction methods !!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-save(geo_clin_list, file = str_c(outdir, "geo_clin_list.RData"))
+save(geo_clin_list, file = str_c(out_data, "geo_clin_list.RData"))
 
 #
 # ==============================================================================

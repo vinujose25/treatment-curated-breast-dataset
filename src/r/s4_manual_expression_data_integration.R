@@ -25,7 +25,7 @@
 # 1. Prepare data
 # ==============================================================================
 
-# load(str_c(outdir, "geo.RData"))
+# load(str_c(out_data, "geo.RData"))
 length(geo) # 39 series matrices
 
 #
@@ -543,7 +543,7 @@ geo <- purrr::map(
 )
 
 # Saving
-# save(geo, file = str_c(outdir,"geo.RData"))
+# save(geo, file = str_c(out_data,"geo.RData"))
 
 #
 # ==============================================================================
@@ -556,7 +556,7 @@ geo <- purrr::map(
 # ==============================================================================
 
 
-# load(str_c(outdir,"geo.RData"))
+# load(str_c(out_data,"geo.RData"))
 
 
 table(purrr::map_chr(geo,~class(.x$expression$ID_REF)))
@@ -860,8 +860,8 @@ gse_gpl_cong %>%
 
 # Save gpl !!!!!!!!
 #
-# save(gpl, file = str_c(outdir, "gpl.RData"))
-# load(str_c(outdir, "gpl.RData"))
+# save(gpl, file = str_c(out_data, "gpl.RData"))
+# load(str_c(out_data, "gpl.RData"))
 
 
 
@@ -900,8 +900,8 @@ names(geo_maxvar_annot) <- names(geo)
 
 # Save RData !!!!!!!
 #
-# save(geo_maxvar_annot, file = str_c(outdir, "geo_maxvar_annot.RData"))
-# load(str_c(outdir, "geo_maxvar_annot.RData"))
+# save(geo_maxvar_annot, file = str_c(out_data, "geo_maxvar_annot.RData"))
+# load(str_c(out_data, "geo_maxvar_annot.RData"))
 
 
 
@@ -1017,8 +1017,8 @@ geo_tidy <- purrr::map2(
 
 # Save RData !!!!!!!!!!
 #
-# save(geo_tidy, file = str_c(outdir, "geo_tidy.RData"))
-# load(str_c(outdir, "geo_tidy.RData"))
+# save(geo_tidy, file = str_c(out_data, "geo_tidy.RData"))
+# load(str_c(out_data, "geo_tidy.RData"))
 
 #
 # ==============================================================================
@@ -1281,8 +1281,8 @@ head2(geo_expr)
 
 
 # Save RData !!!!!
-# save(geo_expr, file = str_c(outdir, "geo_expr.RData"))
-# save(geo_expr_meta, file = str_c(outdir, "geo_expr_meta.RData"))
+# save(geo_expr, file = str_c(out_data, "geo_expr.RData"))
+# save(geo_expr_meta, file = str_c(out_data, "geo_expr_meta.RData"))
 
 #
 # ==============================================================================

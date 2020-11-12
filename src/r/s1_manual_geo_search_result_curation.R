@@ -89,7 +89,7 @@ sum(geo_series_summary$Sample_size) # 37497
 write_tsv(
   x = geo_series_summary,
   path = str_c(
-    outdir,
+    out_data,
     "geo_search_taxane.antracyclin.breast_31july2020_SearchResult_curated.tsv"
   )
 )
@@ -111,17 +111,20 @@ write_tsv(
 # Load annotated geo_series_summary !!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 geo_series_summary <- read_tsv(
-  file = "results/main/geo_search_taxane.antracyclin.breast_31july2020_SearchResult_annotated.tsv"
+  file = str_c(
+    out_data,
+    "geo_search_taxane.antracyclin.breast_31july2020_SearchResult_annotated.tsv"
+  )
 ) %>%
-    dplyr::rename_all(~(str_c("Series_", .x) %>%
-                          str_to_sentence() %>%
-                          str_replace("Series_series","Series")))
+  dplyr::rename_all(~(str_c("Series_", .x) %>%
+                        str_to_sentence() %>%
+                        str_replace("Series_series","Series")))
 
 
 glimpse(geo_series_summary)
 
 # Saving
-# save(geo_series_summary , file = str_c(outdir, "geo_series_summary.RData"))
+# save(geo_series_summary , file = str_c(out_data, "geo_series_summary.RData"))
 
 #
 # ==============================================================================

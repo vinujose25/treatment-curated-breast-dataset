@@ -214,8 +214,8 @@ geo_series_matrix_summary %>%
 
 # Save geo_series_matrix_summary !!!!!!!!!!!!!!!!!!!
 #
-# save(geo_series_matrix_summary, file = str_c(outdir,"geo_series_matrix_summary.RData"))
-# load(str_c(outdir,"geo_series_matrix_summary.RData"))
+# save(geo_series_matrix_summary, file = str_c(out_data,"geo_series_matrix_summary.RData"))
+# load(str_c(out_data,"geo_series_matrix_summary.RData"))
 
 #
 # ==============================================================================
@@ -285,7 +285,7 @@ for(inme in nme){
 dim(geo_clin) # 5022 429
 
 write_tsv(x = tibble(Column_name = sort(names(geo_clin))),
-          path = str_c(outdir, "geo_clin_column_name.tsv"))
+          path = str_c(out_data, "geo_clin_column_name.tsv"))
 
 
 nme <- c(
@@ -487,12 +487,12 @@ drugs <- geo_clin$Arm_expanded %>%
 
 # Write out drugs.tsv for manual annoattion !!!!!!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# write_tsv(x=tibble(Drug_name = drugs), path = str_c(outdir, "drugs.tsv"))
+# write_tsv(x=tibble(Drug_name = drugs), path = str_c(out_data, "drugs.tsv"))
 
 
 # Loading annoatated and cleaned drugs.tsv !!!!!!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-drugs <- read_tsv(file = str_c(outdir, "drugs_cleaned.tsv"))
+drugs <- read_tsv(file = str_c(out_data, "drugs_cleaned.tsv"))
 
 drugs <- drugs %>%
   dplyr::mutate(
@@ -1005,8 +1005,8 @@ head2(geo_clin)
 # # Save geo_clin.RData !!!!!!!!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # #
-# save(geo_clin, file = str_c(outdir, "geo_clin.RData"))
-# load(str_c(outdir, "geo_clin.RData"))
+# save(geo_clin, file = str_c(out_data, "geo_clin.RData"))
+# load(str_c(out_data, "geo_clin.RData"))
 
 #
 # ==============================================================================
@@ -1052,8 +1052,8 @@ purrr::map_lgl(
 
 # # Save RData !!!!!!!!!!!!!!!!!
 # #
-# save(geo_tidy, file = str_c(outdir, "geo_tidy.RData"))
-# load(str_c(outdir, "geo_tidy.RData"))
+# save(geo_tidy, file = str_c(out_data, "geo_tidy.RData"))
+# load(str_c(out_data, "geo_tidy.RData"))
 
 #
 # ==============================================================================

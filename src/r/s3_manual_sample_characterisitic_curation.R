@@ -59,7 +59,7 @@
 # 1. Prepare data
 # ==============================================================================
 
-# load(str_c(outdir, "geo.RData"))
+# load(str_c(out_data, "geo.RData"))
 length(geo) # 44 series matrices
 
 
@@ -75,7 +75,7 @@ xx <- sort(xx) %>% tibble::enframe(name = NULL)
 # Writing out sample characteristics names !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # This is to generate consistent naming of characteristics  !!!!!!!!!!!!!!!!!!!
 #
-# write_tsv(xx, str_c(outdir, "all_column_names.txt"))
+# write_tsv(xx, str_c(out_data, "all_column_names.txt"))
 
 
 
@@ -123,9 +123,9 @@ for(inme in names(geo)){
 
   # The formatted sample characteristics are written out to text file for
   # manual curation and annotation
-  write_tsv(x = xx, path = str_c(outdir,inme,".tsv"))
+  write_tsv(x = xx, path = str_c(out_data,inme,".tsv"))
 }
-# The above files are stored in results/main/curated_clinical_data/
+# The above files are stored in results/data/curated_clinical_data/
 # (previously named as "reformatted_clinical_data") !!!!!!!
 # The curated/annotated files have the name suffix, "_cleaned.tsv"
 
@@ -153,7 +153,7 @@ for(inme in names(geo)){
 # GSE25066
 # >>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE25066.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE25066.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -311,7 +311,7 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE25066_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE25066_cleaned.tsv"
 )
 
 
@@ -320,7 +320,7 @@ write_tsv(
 # GSE20685
 # >>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE20685.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE20685.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -435,7 +435,7 @@ table(xx1$Size_bin)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE20685_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE20685_cleaned.tsv"
 )
 
 
@@ -444,7 +444,7 @@ write_tsv(
 # GSE41998
 # >>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE41998.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE41998.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -533,7 +533,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE41998_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE41998_cleaned.tsv"
 )
 
 
@@ -542,7 +542,7 @@ write_tsv(
 # GSE20194
 # >>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE20194.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE20194.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -616,7 +616,7 @@ xx1 <- xx %>%
 
 
 # old version of formatted
-xx2 <- read_tsv(file = "results/main/curated_clinical_data/GSE20194_cleaned_old.tsv")
+xx2 <- read_tsv(file = "results/data/curated_clinical_data/GSE20194_cleaned_old.tsv")
 identical(xx1$Sample_geo_accession, xx2$Sample_geo_accession) # TRUE
 
 table(xx1$Arm_neoadj)
@@ -653,7 +653,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE20194_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE20194_cleaned.tsv"
 )
 
 
@@ -662,7 +662,7 @@ write_tsv(
 # GSE32603
 # >>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE32603.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE32603.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -742,7 +742,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE32603_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE32603_cleaned.tsv"
 )
 
 
@@ -751,7 +751,7 @@ write_tsv(
 # GSE22219
 # >>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE22219.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE22219.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -834,7 +834,7 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE22219_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE22219_cleaned.tsv"
 )
 
 
@@ -843,7 +843,7 @@ write_tsv(
 # GSE4056
 # >>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE4056.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE4056.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -941,7 +941,7 @@ table(xx3$Arm_neoadj)
 
 write_tsv(
   x = xx3,
-  path = "results/main/curated_clinical_data/GSE4056_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE4056_cleaned.tsv"
 )
 
 
@@ -950,7 +950,7 @@ write_tsv(
 # GSE34138
 # >>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE34138.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE34138.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -1004,7 +1004,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE34138_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE34138_cleaned.tsv"
 )
 
 
@@ -1012,7 +1012,7 @@ write_tsv(
 # GSE20271
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE20271.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE20271.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -1087,7 +1087,7 @@ xx1 <- xx %>%
     Arm_neoadj = rep(NA, nrow(xx))
   )
 
-xx2 <- read_tsv(file = "results/main/curated_clinical_data/GSE20271_cleaned_old.tsv")
+xx2 <- read_tsv(file = "results/data/curated_clinical_data/GSE20271_cleaned_old.tsv")
 names(xx2) <- clean_names(names(xx2))
 glimpse(xx2) # non standard character
 glimpse(xx2 %>% dplyr::select(-c("Sample_procurement_details", "Archive_details")))
@@ -1104,7 +1104,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE20271_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE20271_cleaned.tsv"
 )
 
 
@@ -1112,7 +1112,7 @@ write_tsv(
 # GSE109710
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE109710.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE109710.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx)
 
@@ -1168,7 +1168,7 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE109710_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE109710_cleaned.tsv"
 )
 
 
@@ -1177,7 +1177,7 @@ write_tsv(
 # GSE6861
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE6861.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE6861.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 161
 
@@ -1246,7 +1246,7 @@ table(xx1$Arm_neoadj)
 #                   59                  102
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE6861_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE6861_cleaned.tsv"
 )
 
 
@@ -1254,7 +1254,7 @@ write_tsv(
 # GSE22358
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE22358.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE22358.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 161
 
@@ -1340,14 +1340,14 @@ table(xx1$Arm_neoadj)
 # 120                                 34
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE22358_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE22358_cleaned.tsv"
 )
 
 
 # GSE50948
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE50948.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE50948.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 156
 
@@ -1410,7 +1410,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE50948_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE50948_cleaned.tsv"
 )
 
 
@@ -1418,7 +1418,7 @@ write_tsv(
 # GSE22226_GPL4133
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE22226_GPL4133.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE22226_GPL4133.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 20
 
@@ -1520,14 +1520,14 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE22226_GPL4133_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE22226_GPL4133_cleaned.tsv"
 )
 
 
 # GSE22226_GPL1708
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE22226_GPL1708.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE22226_GPL1708.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 130
 
@@ -1631,7 +1631,7 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE22226_GPL1708_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE22226_GPL1708_cleaned.tsv"
 )
 
 
@@ -1639,7 +1639,7 @@ write_tsv(
 # GSE31863
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE31863.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE31863.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 143
 
@@ -1753,7 +1753,7 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE31863_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE31863_cleaned.tsv"
 )
 
 
@@ -1761,7 +1761,7 @@ write_tsv(
 # GSE45255
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE45255.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE45255.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 139
 
@@ -1860,7 +1860,7 @@ xx1 <- xx %>%
   )
 
 
-yy <- read_tsv(file = "results/main/curated_clinical_data/GSE45255_cleaned_old.tsv")
+yy <- read_tsv(file = "results/data/curated_clinical_data/GSE45255_cleaned_old.tsv")
 names(yy) <- clean_names(names(yy))
 glimpse(yy) # 139
 
@@ -1886,14 +1886,14 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE45255_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE45255_cleaned.tsv"
 )
 
 
 # GSE69031
 # >>>>>>>>>>>>>>>>
 
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE69031.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE69031.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 139
 
@@ -2039,13 +2039,13 @@ table(xx1$Arm_adj)
 # 24                 14                  7
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE69031_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE69031_cleaned.tsv"
 )
 
 
 
 # GSE16446 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE16446.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE16446.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 139
 
@@ -2120,13 +2120,13 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE16446_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE16446_cleaned.tsv"
 )
 
 
 
 # GSE32646 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE32646.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE32646.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 115
 
@@ -2181,13 +2181,13 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE32646_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE32646_cleaned.tsv"
 )
 
 
 
 # GSE19615 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE19615.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE19615.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 115
 
@@ -2317,14 +2317,14 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE19615_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE19615_cleaned.tsv"
 )
 
 
 
 
 # GSE130786 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE130786.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE130786.tsv")
 names(xx) <- clean_names(names(xx))
 names(xx)[10] <- "Sample_type.1" # redundant coullmn name
 glimpse(xx) # 110
@@ -2373,13 +2373,13 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE130786_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE130786_cleaned.tsv"
 )
 
 
 
 # GSE22093 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE22093.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE22093.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 110
 
@@ -2432,13 +2432,13 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE22093_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE22093_cleaned.tsv"
 )
 
 
 
 # GSE4779 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE4779.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE4779.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 102
 
@@ -2482,7 +2482,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE4779_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE4779_cleaned.tsv"
 )
 
 
@@ -2490,7 +2490,7 @@ write_tsv(
 
 
 # GSE114403 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE114403.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE114403.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 100
 
@@ -2559,12 +2559,12 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE114403_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE114403_cleaned.tsv"
 )
 
 
 # GSE76360 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE76360.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE76360.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 100
 
@@ -2616,7 +2616,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE76360_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE76360_cleaned.tsv"
 )
 
 
@@ -2624,7 +2624,7 @@ write_tsv(
 
 
 # GSE21997_GPL1390 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE21997_GPL1390.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE21997_GPL1390.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 35
 
@@ -2711,7 +2711,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE21997_GPL1390_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE21997_GPL1390_cleaned.tsv"
 )
 
 
@@ -2719,7 +2719,7 @@ write_tsv(
 
 
 # GSE21997_GPL5325 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE21997_GPL5325.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE21997_GPL5325.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 32
 
@@ -2802,13 +2802,13 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE21997_GPL5325_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE21997_GPL5325_cleaned.tsv"
 )
 
 
 
 # GSE21997_GPL7504 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE21997_GPL7504.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE21997_GPL7504.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 31
 
@@ -2889,14 +2889,14 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE21997_GPL7504_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE21997_GPL7504_cleaned.tsv"
 )
 
 
 
 
 # GSE42822 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE42822.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE42822.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 91
 
@@ -2969,14 +2969,14 @@ table(xx1$Grade)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE42822_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE42822_cleaned.tsv"
 )
 
 
 
 
 # GSE66305 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE66305.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE66305.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 88
 
@@ -3025,7 +3025,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE66305_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE66305_cleaned.tsv"
 )
 
 
@@ -3033,7 +3033,7 @@ write_tsv(
 
 
 # GSE66999 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE66999.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE66999.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 76
 
@@ -3099,7 +3099,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE66999_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE66999_cleaned.tsv"
 )
 
 
@@ -3108,7 +3108,7 @@ write_tsv(
 
 
 # GSE28844 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE28844.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE28844.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
 
@@ -3176,14 +3176,14 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE28844_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE28844_cleaned.tsv"
 )
 
 
 
 
 # GSE23988 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE23988.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE23988.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
 
@@ -3234,7 +3234,7 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE23988_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE23988_cleaned.tsv"
 )
 
 
@@ -3242,7 +3242,7 @@ write_tsv(
 
 
 # GSE18728 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE18728.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE18728.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
 
@@ -3306,12 +3306,12 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE18728_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE18728_cleaned.tsv"
 )
 
 
 # GSE21974 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE21974.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE21974.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
 
@@ -3388,12 +3388,12 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE21974_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE21974_cleaned.tsv"
 )
 
 
 # GSE143222 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE143222.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE143222.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
 
@@ -3444,14 +3444,14 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE143222_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE143222_cleaned.tsv"
 )
 
 
 
 
 # GSE16391 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE16391.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE16391.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 55
 
@@ -3552,14 +3552,14 @@ table(xx1$Arm_adj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE16391_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE16391_cleaned.tsv"
 )
 
 
 
 
 # GSE75678 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE75678.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE75678.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 54
 
@@ -3682,7 +3682,7 @@ xx1 <- xx %>%
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE75678_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE75678_cleaned.tsv"
 )
 
 
@@ -3700,7 +3700,7 @@ names(table(unlist(yy)))
 
 
 # GSE55348 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE55348.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE55348.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 53
 
@@ -3755,7 +3755,7 @@ xx1 <- xx %>%
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE55348_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE55348_cleaned.tsv"
 )
 
 
@@ -3763,7 +3763,7 @@ write_tsv(
 
 
 # GSE8465_GPL1390 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE8465_GPL1390.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE8465_GPL1390.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 2
 
@@ -3858,7 +3858,7 @@ xx1 <- xx %>%
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE8465_GPL1390_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE8465_GPL1390_cleaned.tsv"
 )
 
 
@@ -3866,7 +3866,7 @@ write_tsv(
 
 
 # GSE8465_GPL887 >>>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE8465_GPL887.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE8465_GPL887.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 44
 
@@ -4010,13 +4010,13 @@ xx1 <- xx %>%
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE8465_GPL887_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE8465_GPL887_cleaned.tsv"
 )
 
 
 
 # GSE143846 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE143846.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE143846.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 44
 
@@ -4063,14 +4063,14 @@ table(xx1$Arm_neoadj)
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE143846_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE143846_cleaned.tsv"
 )
 
 
 
 
 # GSE55374 >>>>>>>>>>>>>>>>
-xx <- read_tsv(file = "results/main/curated_clinical_data/GSE55374.tsv")
+xx <- read_tsv(file = "results/data/curated_clinical_data/GSE55374.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 36
 
@@ -4114,7 +4114,7 @@ xx1 <- xx %>%
 
 write_tsv(
   x = xx1,
-  path = "results/main/curated_clinical_data/GSE55374_cleaned.tsv"
+  path = "results/data/curated_clinical_data/GSE55374_cleaned.tsv"
 )
 
 #
@@ -4126,7 +4126,7 @@ write_tsv(
 # 3. Append curated sample characterisitics (Clinical data) to geo
 # ==============================================================================
 
-files <- list.files("results/main/curated_clinical_data", full.names = TRUE)
+files <- list.files("results/data/curated_clinical_data", full.names = TRUE)
 files <- files[str_detect(files, "_cleaned\\.tsv")]
 id <- str_split_fixed(files,"/",4)[,4]
 id <- str_split_fixed(id, "_cleaned.tsv", 2)[, 1]
@@ -4184,7 +4184,7 @@ purrr::map_lgl(geo,~("Arm" %in% names(.x$clinical)))
 
 
 # Saving
-# save(geo, file = str_c(outdir, "geo.RData"))
+# save(geo, file = str_c(out_data, "geo.RData"))
 
 #
 # ==============================================================================

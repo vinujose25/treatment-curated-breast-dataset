@@ -80,17 +80,17 @@ for(inme in nme){
   # sample characterisitcs if necessary.
   write_tsv(
     geo[[inme]]$sample,
-    path = str_c(outdir, inme, "_sample.tsv")
+    path = str_c(out_data, inme, "_sample.tsv")
   )
 
   # Sample characteristics data of series matrices for which atleast one
   # sample characterisitc has doubious value.
   write_tsv(
     geo[[inme]]$sample_characteristics,
-    path = str_c(outdir, inme, "_sample_characteristics.tsv")
+    path = str_c(out_data, inme, "_sample_characteristics.tsv")
   )
 }
-# The above files are kept in results/main/var_qc_failed_sample_characteristics/
+# The above files are kept in results/data/var_qc_failed_sample_characteristics/
 # The corrected files have the suffix "_cleaned"
 
 # Manual formatting performed:
@@ -107,7 +107,7 @@ for(inme in nme){
 # 3.Append the formatted(curated) sample characterisitics to geo object
 # ==============================================================================
 
-files <- list.files("results/main/var_qc_failed_sample_characteristics", full.names = TRUE)
+files <- list.files("results/data/var_qc_failed_sample_characteristics", full.names = TRUE)
 files <- files[str_detect(files, "_cleaned")]
 id <- str_split_fixed(files,"/",4)[,4]
 id <- str_split_fixed(id, "_sample_characteristics_cleaned.tsv", 2)[, 1]
@@ -133,7 +133,7 @@ length(geo) # 44
 
 
 # Saving
-# save(geo, file = str_c(outdir, "geo.RData")) # updated geo
+# save(geo, file = str_c(out_data, "geo.RData")) # updated geo
 
 #
 # ==============================================================================

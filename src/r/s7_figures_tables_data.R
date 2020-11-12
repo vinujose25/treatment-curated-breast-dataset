@@ -21,21 +21,47 @@
 # 6. Summarize patient characteristics and generate table plot
 # 7. Summarize drug classes and generate table plot
 # 8. Summarize non relevant patient characterisitics
-
+# 9. Comapre curatedBreastData package with present study
+# 10. Genarate a table containing GEO search with series details,
+# selected/rejected flag, reason for rejection.
+# 11. Generate a table detailing the project file structure, and details of
+# individual files.
 
 
 
 # 1. Prepare data
 # ==============================================================================
 
-load(str_c(outdir,"geo_expr_list.RData"))
-load(str_c(outdir,"geo_clin_list.RData"))
+# To generate qc related to the reliability of expression data matrix
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+load(str_c(out_data,"geo_expr_list.RData"))
+load(str_c(out_data,"geo_clin_list.RData"))
 
 names(geo_expr_list)[1] # Original
 names(geo_expr_list)[1] = "Non-corrected"
 
 names(geo_clin_list)[1] # Original
 names(geo_clin_list)[1] = "Non-corrected"
+
+
+
+# For comaprison with curatedBreastData R package.
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+data("clinicalData")
+planey <- clinicalData$clinicalTable %>% as_tibble()
+planey_annot <- clinicalData$clinicalVarDef %>% as_tibble()
+rm(clinicalData)
+
+
+
+# To generate a table with original serach result and result of dataset selection
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+load(str_c(out_data, "geo_series_summary.RData"))
+load(str_c(out_data, "geo_series_matrix_summary.RData"))
+
 
 #
 # ==============================================================================
@@ -51,7 +77,7 @@ purrr::map(
     x <- lst[[nme]]
     x[,-1] <- round(x[,-1], digits = 3)
     nme <- str_replace(nme,"-","") # Non-corrected to Noncorrected
-    write_delim(x = x, path = str_c(outdir,"geo_expr_", nme, ".tsv"), delim = "\t")
+    write_delim(x = x, path = str_c(out_data,"geo_expr_", nme, ".tsv"), delim = "\t")
     TRUE
   },
   geo_expr_list
@@ -63,7 +89,7 @@ purrr::map(
   function(nme, lst){
     x <- lst[[nme]]
     nme <- str_replace(nme,"-","") # Non-corrected to Noncorrected
-    write_delim(x = x, path = str_c(outdir,"geo_clin_", nme, ".tsv"), delim = "\t")
+    write_delim(x = x, path = str_c(out_data,"geo_clin_", nme, ".tsv"), delim = "\t")
     TRUE
   },
   geo_clin_list
@@ -117,7 +143,7 @@ p <- xx %>%
         panel.grid.minor.x = element_blank())
 
 
-pdf2(file = str_c(outdir, "figure_rle.pdf"), width = 7.5, height = 4.5)
+pdf2(file = str_c(out_figures, "figure_rle.pdf"), width = 7.5, height = 4.5)
 print(p)
 dev.off()
 
@@ -196,7 +222,7 @@ p <- xx %>%
   )
 
 
-pdf2(file = str_c(outdir, "table_kappa.pdf"), height = 1.5, width = 2)
+pdf2(file = str_c(out_tables, "table_kappa.pdf"), height = 1.5, width = 2)
 print(p)
 dev.off()
 
@@ -268,7 +294,7 @@ p <- xx %>%
   )
 
 
-pdf2(file = str_c(outdir, "table_auc.pdf"), height = 1.5, width = 3)
+pdf2(file = str_c(out_tables, "table_auc.pdf"), height = 1.5, width = 3)
 print(p)
 dev.off()
 
@@ -738,7 +764,7 @@ glimpse(pt_sum)
 
 # Writing out patient summary !!!!!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-write_csv(x = pt_sum, path = str_c(outdir, "table_patient_summary.csv"))
+write_csv(x = pt_sum, path = str_c(out_tables, "table_patient_summary.csv"))
 
 
 # Remove repition of variable names in the table for reomving clutter
@@ -797,7 +823,7 @@ p <- pt_sum %>%
   )
 
 
-pdf2(file = str_c(outdir, "table_patient_summary.pdf"), height = 8, width = 7.5)
+pdf2(file = str_c(out_tables, "table_patient_summary.pdf"), height = 8, width = 7.5)
 print(p)
 dev.off()
 
@@ -809,7 +835,7 @@ dev.off()
 # 7. Summarize drug classes and generate table plot
 # ==============================================================================
 
-drug_sum <- read_tsv(file = str_c(outdir, "drugs_cleaned.tsv")) %>%
+drug_sum <- read_tsv(file = str_c(out_data, "drugs_cleaned.tsv")) %>%
   na.omit()
 
 drug_sum <- drug_sum %>%
@@ -871,7 +897,7 @@ p <- drug_sum %>%
   )
 
 
-pdf2(file = str_c(outdir, "table_drug_class_summary.pdf"), height = 5, width = 3.75)
+pdf2(file = str_c(out_tables, "table_drug_class_summary.pdf"), height = 5, width = 3.75)
 print(p)
 dev.off()
 
@@ -1056,7 +1082,342 @@ names(clin)
 
 
 
+# 9. Genarate a table containing GEO search with series details,
+# selected/rejected flag, reason for rejection.
+# ==============================================================================
 
+dim(geo_series_summary) # 172 19
+dim(geo_series_matrix_summary) # 175 30
+
+glimpse(geo_series_summary)
+glimpse(geo_series_matrix_summary)
+
+geo_series_matrix_summary$Series_matrix_selected %>% table()
+# no yes
+# 137  38
+geo_series_matrix_summary$Series_selected %>% table()
+# no yes
+# 132  43
+
+geo_series_summary$Series_selected %>% table()
+# no  yes
+# 132  40
+
+
+# Genrate series summary from series_matrix_summary and then collapse selected
+# multi-series-matrix per geo series if present.
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+dataset_summary <- geo_series_matrix_summary %>%
+  left_join(geo_clin_list$`Non-corrected` %>%
+              dplyr::select(Series_matrix_accession) %>%
+              dplyr::mutate(Final_filtering = "yes") %>%
+              dplyr::distinct(Series_matrix_accession, .keep_all =TRUE),
+            by = "Series_matrix_accession") %>%
+  dplyr::select(
+    "Series_id",
+    "Series_accession",
+    "Series_matrix_accession",
+    "Series_selected",
+    "Series_matrix_selected",
+    "Final_filtering",
+    "Series_comment",
+    "Series_matrix_comment",
+    "Series_title",
+    "Series_description",
+    "Series_organism",
+    "Series_type",
+    "Series_platform",
+    "Series_sample_size",
+    "Series_ftp",
+    "Series_arm",
+    "Series_arm_description",
+    "Series_survival",
+    "Series_regimen",
+    "Series_sample_procurement",
+    "Series_sample_procurement_details",
+    "Series_archive_method",
+    "Series_archive_details"
+  ) %>%
+  dplyr::mutate(
+    Series_id = as.character(Series_id),
+    Series_status = paste(
+      #!! str_c() wiil propogate NAs
+      Series_selected, Series_matrix_selected, Final_filtering)
+  ) %>%
+  dplyr::select(
+    -c("Series_selected",
+       "Series_matrix_selected",
+       "Final_filtering"
+    )) %>%
+  dplyr::mutate(
+
+    Series_status = purrr::map_chr(
+      Series_status,
+      ~switch (
+        .x,
+        "no no NA" = "non_compactable",
+        "yes no NA" = "non_compactable",
+        "yes yes NA" = "poor_genome_representation",
+        "yes yes yes" = "selected",
+        "non_compactable"
+      )
+      ),
+
+    Series_status = ifelse(
+      Series_accession == "GSE4056",
+      "missingness",
+      Series_status),
+
+    Series_selected = ifelse(
+      Series_status == "selected",
+      "yes", "no")
+  )
+
+
+
+dataset_summary$Series_status %>% table()
+# missingness            non_compactable poor_genome_representation
+# 1                        136                          9
+# selected
+# 29
+dataset_summary$Series_selected %>% table()
+# no yes
+# 146  29
+
+
+
+
+dim(dataset_summary) # 175 22 !!!
+dataset_summary$Series_accession %>% unique() %>% length() # 172 !!!
+
+# The difference is due to multiple series matrices per geo series.
+# Collpase the series matrices manually, to make the summary sereis centric !!!!!
+# Only collapse the selected series matrices, to avoid ambigiuty.
+
+idx <- purrr::map(dataset_summary$Series_accession %>% unique(),
+                  function(x, id){which(x==id)},
+                  dataset_summary$Series_accession)
+names(idx) = dataset_summary$Series_accession %>% unique()
+idx <- idx[purrr::map_int(idx, length) >1]
+# $GSE22226
+# [1] 59 60
+# $GSE21997
+# [1] 94 95 96
+
+dataset_summary[unlist(idx), ] %>%
+  dplyr::select(Series_accession,Series_matrix_accession, Series_status)
+#   Series_accession Series_matrix_accession Series_status
+# 1 GSE22226         GSE22226_GPL1708        poor_genome_representation !!! discard
+# 2 GSE22226         GSE22226_GPL4133        selected
+
+# 3 GSE21997         GSE21997_GPL1390        poor_genome_representation !!! discard
+# 4 GSE21997         GSE21997_GPL5325        selected
+# 5 GSE21997         GSE21997_GPL7504        selected
+
+# Removing non-selected seires matrices from serieses containing multiple series matrices
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+purrr::map_int(idx, ~(.x[1]))
+# GSE22226 GSE21997
+# 59       94
+dataset_summary <- dataset_summary[-purrr::map_int(idx, ~(.x[1])),]
+
+
+# Repeat the collapsing process (as indices changed due to the above filtering)
+# !!!!!!!!!!!!!!!!!!!!!!!1
+
+idx <- purrr::map(dataset_summary$Series_accession %>% unique(),
+                  function(x, id){which(x==id)},
+                  dataset_summary$Series_accession)
+names(idx) = dataset_summary$Series_accession %>% unique()
+idx <- idx[purrr::map_int(idx, length) >1]
+# $GSE21997
+# [1] 93 94
+
+dataset_summary[unlist(idx), ] %>%
+  dplyr::select(Series_accession,Series_matrix_accession, Series_status)
+#   Series_accession Series_matrix_accession Series_status
+# 1 GSE21997         GSE21997_GPL5325        selected
+# 2 GSE21997         GSE21997_GPL7504        selected
+
+
+dataset_summary$Series_matrix_accession[idx$GSE21997[1]] =
+  dataset_summary$Series_matrix_accession[idx$GSE21997] %>% str_c(collapse = "///")
+
+idx <- purrr::map(idx,~(.x <- .x[-1])) %>% unlist() # keeping only the updated row
+dataset_summary <- dataset_summary[-idx,]
+
+dim(dataset_summary) # 172 22
+
+
+dataset_summary$Series_status %>% table()
+# missingness            non_compactable poor_genome_representation
+# 1                        136                          7
+# selected
+# 28
+dataset_summary$Series_selected %>% table()
+# no yes
+# 144  28
+# In agreement with supplementary figure 1: Integrated script structure and
+# study flow chart.
+
+
+write_tsv(x = dataset_summary,
+          path = str_c(out_tables, "table_geo_series_summary.tsv"))
+
+#
+# ==============================================================================
+
+
+
+
+
+# 10. Comapre curatedBreastData package with present study
+# ==============================================================================
+
+# a. Create a comprehensive list of all series matrices present in both studies
+# b. Create a summary table of series matrices present in
+# current study and curatedBreastData
+# c. Manually curate datasets unique to curatedBreastData
+
+
+
+# planey
+# planey_annot
+
+glimpse(planey)
+# relevant variables
+# $ study_ID                                       <int> 32646, 32646, 32646, 32646, 32…
+# $ patient_ID                                     <int> 809184, 809185, 809186, 809187…
+# $ GEO_GSMID                                      <int> 809184, 809185, 809186, 809187…
+
+planey_annot[1:5,]
+# 1 dbUniquePatient… Unique patient id created for this database.
+# 2 study_ID         GEO GSE study ID.
+# 3 patient_ID       patient ID used in phenoData, expression matrix.
+# 4 GEO_GSMID        GEO GSM patient (sample) ID. Often the same as patient ID, most samp…
+# 5 platform_ID      general platform ID.
+
+identical(planey$patient_ID, planey$GEO_GSMID) # TRUE
+
+
+
+dim(planey) # 2719 139
+
+planey <- planey %>%
+  dplyr::mutate(Series_accession = str_c("GSE", study_ID), # used for merging
+                Series_accession_curatedBreastData = Series_accession,
+                Series_selected_curatedBreastData = "yes") %>%
+  dplyr::select(Series_accession, Series_accession_curatedBreastData,
+                Series_selected_curatedBreastData) %>%
+  dplyr::distinct(Series_accession, .keep_all = TRUE)
+
+dim(planey) # 24 3
+
+
+
+
+dataset_comparison <- list()
+
+# a. Create a comprehensive list of all series matrices present in both studies
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+# Get pooled sereis accession from both studies and merge details from
+# independet studies to it.
+id <- c(dataset_summary$Series_accession, planey$Series_accession) %>% unique()
+id %>% length() # 183
+
+
+dataset_comparison [["Comprehensive_list"]]<- left_join(
+  tibble(Series_accession = id),
+  dataset_summary %>%
+    dplyr::mutate(Series_accession_present_study = Series_accession) %>%
+    dplyr::rename(Series_selected_present_study = "Series_selected",
+                  Series_status_present_study = "Series_status",
+                  Series_comment_present_study = "Series_comment") %>%
+    dplyr::select(Series_accession,
+                  Series_accession_present_study,
+                  Series_selected_present_study,
+                  Series_status_present_study,
+                  Series_comment_present_study),
+  by = "Series_accession"
+) %>% left_join(
+  planey,
+  by = "Series_accession"
+)
+
+glimpse(dataset_comparison$Comprehensive_list)
+
+
+
+# b. Create a summary table of series matrices present in
+# current study and curatedBreastData
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+dataset_comparison [["PresentData_vs_curatedBreastData"]] <-
+  dataset_comparison$Comprehensive_list %>%
+  dplyr::group_by(Series_selected_present_study,
+                  Series_selected_curatedBreastData) %>%
+  dplyr::summarise(Dataset_count = n())
+#   Series_selected_present_study Series_selected_curatedBreastData     N
+# 1 no                            yes                                   3
+# 2 no                            NA                                  141
+# 3 yes                           yes                                  10
+# 4 yes                           NA                                   18
+# 5 NA                            yes                                  11
+
+
+
+
+# Manually curate the 11 studies unique to curatedBreastData
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+# write_tsv(x = dataset_comparison %>%
+#             dplyr::filter(is.na(Series_selected_present_study)) %>%
+#             dplyr::select(Series_accession_curatedBreastData),
+#           path = str_c(out_data, "table_datasets_unique_to_curatedBreastData.tsv"))
+
+# loading curated dataset
+dataset_comparison [["Unique_curatedBreastData"]] <-
+  read_delim(
+  file = str_c(out_data, "table_datasets_unique_to_curatedBreastData_curated.tsv"),
+  delim = "\t"
+) %>%
+  dplyr::select(1:3)
+
+
+names(dataset_comparison)
+# [1] "Comprehensive_list"               "PresentData_vs_curatedBreastData"
+# [3] "Unique_curatedBreastData"
+
+
+# Write out table
+write_tsv(
+  x = dataset_comparison$Comprehensive_list,
+  path = str_c(out_tables, "table_dataset_comparison_comprehensive_list.tsv")
+)
+write_tsv(
+  x = dataset_comparison$PresentData_vs_curatedBreastData,
+  path = str_c(out_tables, "table_dataset_comparison_presentData_vs_curatedBreastData.tsv")
+)
+write_tsv(
+  x = dataset_comparison$Unique_curatedBreastData,
+  path = str_c(out_tables, "table_dataset_comparison_unique_curatedBreastData.tsv")
+)
+# Merge the above 3 tables into one excel file.
+
+
+#
+# ==============================================================================
+
+
+
+# 11. Generate a table detailing the project file structure, and details of
+# individual files.
+# ==============================================================================
+
+#
+# ==============================================================================
 
 
 

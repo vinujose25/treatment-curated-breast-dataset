@@ -25,10 +25,31 @@
 # ==============================================================================
 
 # Output directory
-if(!dir.exists("results/main")){
-  dir.create(path = "results/main", recursive = TRUE, mode = "0700")
+if(!dir.exists("results/tables")){
+  dir.create(path = "results/tables", recursive = TRUE, mode = "0700")
 }
-outdir <- "results/main/"
+if(!dir.exists("results/figures")){
+  dir.create(path = "results/figures", recursive = TRUE, mode = "0700")
+}
+if(!dir.exists("results/data")){
+  dir.create(path = "results/data", recursive = TRUE, mode = "0700")
+}
+if(!dir.exists("results/documents")){
+  dir.create(path = "results/documents", recursive = TRUE, mode = "0700")
+}
+
+
+out_tables <- "results/tables/"
+out_figures <- "results/figures/"
+out_data <- "results/data/"
+out_documents <- "results/documents/"
+
+
+# # Output directory
+# if(!dir.exists("results/main")){
+#   dir.create(path = "results/main", recursive = TRUE, mode = "0700")
+# }
+# outdir <- "results/main/"
 
 # # Tmp directory
 # if(!dir.exists("results/tmp")){
@@ -52,12 +73,16 @@ library(pROC) # roc, auc
 library(irr) # kappa2: Cohen's kappa
 library(hablar) # retype: Transforms all elements into simple classes
 library(DescTools) # RobScale: Robust Scaling With Median and Mad
+library(rmarkdown) # render: To render the Rmarkdown file into specific output format
+library(curatedBreastData) # data("clinicalData"): to comapre with present study
+# library(openxlsx) #
+# library(writexl) # write_xlsx: wrirte xlsx files in multiple sheets
 # library(readxl) # read_excel: Read xls and xlsx files
 # library(altmeta) # metahet: Meta-Analysis Heterogeneity Measures
 
 
 # Private
-source("R/functions.R")
+source("src/r/functions.R")
 
 #
 # ==============================================================================
@@ -104,6 +129,8 @@ source("R/functions.R")
   #       4) Madquantile (log2 + MAD sample scaling + per dataset quantile gene scaling)
   # s7_figures_tables_data.R:
   #       Generate journal specific figures, tables and dataset.
+  # manuscript.Rmd:
+  #       Rmarkdown version of final manuscript.
 
 #
 # ==============================================================================
@@ -243,6 +270,15 @@ source("R/functions.R")
 #                     5) geo_tidy, 6) geo_expr, 7) geo_expr_meta,
 #                     8) geo_series_matrix_summary, 9) geo_clin,
 #                     10) geo_expr_list, 11) geo_clin_list
+
+
+
+# manuscript.Rmd
+# >>>>>>>>>>>>>>
+
+# Rmarkdown version of the manuscript after review.
+render("src/r/manuscript.Rmd", output_dir = out_documents)
+# Ref: https://community.rstudio.com/t/is-it-possible-to-save-the-html-output-in-a-directory-which-is-not-the-one-where-the-rmd-file-resides/3588/5
 
 
 #
