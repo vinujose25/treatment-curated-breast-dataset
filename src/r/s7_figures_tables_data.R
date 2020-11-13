@@ -21,11 +21,9 @@
 # 6. Summarize patient characteristics and generate table plot
 # 7. Summarize drug classes and generate table plot
 # 8. Summarize non relevant patient characterisitics
-# 9. Comapre curatedBreastData package with present study
-# 10. Genarate a table containing GEO search with series details,
+# 9. Genarate a table containing GEO search with series details,
 # selected/rejected flag, reason for rejection.
-# 11. Generate a table detailing the project file structure, and details of
-# individual files.
+# 10. Comapre curatedBreastData package with present study
 
 
 
@@ -1270,8 +1268,6 @@ write_tsv(x = dataset_summary,
 
 
 
-
-
 # 10. Comapre curatedBreastData package with present study
 # ==============================================================================
 
@@ -1409,15 +1405,4 @@ write_tsv(
 
 #
 # ==============================================================================
-
-
-
-# 11. Generate a table detailing the project file structure, and details of
-# individual files.
-# ==============================================================================
-
-#
-# ==============================================================================
-
-
 

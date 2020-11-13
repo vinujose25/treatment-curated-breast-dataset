@@ -16,7 +16,7 @@
 # 1. Directory settings: Directory structure for result storage.
 # 2. Library: Loading of depended R packages and local functions
 # 3. Summary of the pupose of each scripts and their ordinal positions
-# 4. Details of each scripts and the main Robjects/results created within
+# 4. Details of each scripts and the main R-objects/results created within
 
 
 
