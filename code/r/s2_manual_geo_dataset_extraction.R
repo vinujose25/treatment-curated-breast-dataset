@@ -62,11 +62,15 @@ nme <- names(geo)[purrr::map_chr(geo, ~(.x$dataset_issues)) == "Yes"]
 # [16] "GSE66999"         "GSE6861"          "GSE75678"
 # [19] "GSE8465_GPL1390"  "GSE8465_GPL887"
 
-# For the below series, already processed data present in
-# "results/geo/var_qc_failed_sample_characteristics" is used
 
-# "GSE20194" "GSE20271"           "GSE41998"           "GSE50948"
-# "GSE6861"  "GSE25066"
+
+# Delete comment !!!!!!!!!!!!!!!!!!!!!!!!!!
+# # For the below series, already processed data present in
+# # "results/geo/var_qc_failed_sample_characteristics" is used
+#
+# # "GSE20194" "GSE20271"           "GSE41998"           "GSE50948"
+# # "GSE6861"  "GSE25066"
+# End delete comment !!!!!!!!!!!!!!!!!!!!!!
 
 
 

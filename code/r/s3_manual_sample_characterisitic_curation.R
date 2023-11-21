@@ -244,6 +244,9 @@ xx1 <- xx %>%
     Time_dfs = Drfs_even_time_years,
     Response_pathological = if_else(Pathologic_response_pcr_rd == "RD",
                                     "npCR", "pCR"),
+    # @@@@@@@@@@@@@@@@@ Added on 25may2022, back propagation
+    Response =  Response_pathological,
+    # @@@@@@@@@@@@@@@@@
 
     # Arm = purrr::map_chr(
     # Type_taxane,
@@ -1181,7 +1184,7 @@ xx <- read_tsv(file = "results/data/curated_clinical_data/GSE6861.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 161
 
-yy <- read_csv(file = "data/geo_data3/gse_supplementary/GSE6861_demo_from_paper_mmc5.csv")
+yy <- read_csv(file = "data/gse_supplementary/GSE6861_demo_from_paper_mmc5.csv")
 names(yy) <- clean_names(names(yy))
 glimpse(yy) # 125
 
@@ -1895,7 +1898,7 @@ write_tsv(
 
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE69031.tsv")
 names(xx) <- clean_names(names(xx))
-glimpse(xx) # 139
+glimpse(xx) # 130
 
 
 table(xx$Sex)
@@ -2462,7 +2465,10 @@ table(xx$Node)
 xx1 <- xx %>%
   dplyr::mutate(
     Node_cat = if_else(Node == "N-", NA_character_, Node),
-    Node_bin = if_else(Node_cat == "N1", "neg", "pos"),
+    # Node_bin = if_else(Node_cat == "N1", "neg", "pos"),
+    # @@@@@@@@@@@@@@
+    Node_bin = if_else(Node_cat == "N0", "neg", "pos"),
+    # @@@@@@@@@@@@@@
     Size_cat = if_else(Size == "T-", NA_character_, Size),
     Size_bin = if_else(Size_cat == "T1", "small", "large"),
 

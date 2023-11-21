@@ -89,7 +89,7 @@ sum(geo_series_summary$Sample_size) # 37497
 write_tsv(
   x = geo_series_summary,
   path = str_c(
-    out_data,
+    out_tables,
     "geo_search_taxane.antracyclin.breast_31july2020_SearchResult_curated.tsv"
   )
 )
@@ -97,7 +97,7 @@ write_tsv(
 # Annotate "geo_series_summary" manually with information related to
 # regimen/arm, sample procrument method, sample archival method,
 # whether selected for further processing etc. Save the contents as
-# geo_series_summary_taxane.antracyclin.breast_31july2020_SearchResult .tsv(.ods)
+# geo_series_summary_taxane.antracyclin.breast_31july2020_SearchResult_annotated.tsv
 
 #
 # ==============================================================================
@@ -112,7 +112,7 @@ write_tsv(
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 geo_series_summary <- read_tsv(
   file = str_c(
-    out_data,
+    out_tables,
     "geo_search_taxane.antracyclin.breast_31july2020_SearchResult_annotated.tsv"
   )
 ) %>%

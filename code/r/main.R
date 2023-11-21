@@ -75,6 +75,8 @@ library(hablar) # retype: Transforms all elements into simple classes
 library(DescTools) # RobScale: Robust Scaling With Median and Mad
 library(rmarkdown) # render: To render the Rmarkdown file into specific output format
 library(curatedBreastData) # data("clinicalData"): to comapre with present study
+library(xlsx) # write.xlsx wrirte xlsx files in multiple sheets
+
 # library(openxlsx) #
 # library(writexl) # write_xlsx: wrirte xlsx files in multiple sheets
 # library(readxl) # read_excel: Read xls and xlsx files

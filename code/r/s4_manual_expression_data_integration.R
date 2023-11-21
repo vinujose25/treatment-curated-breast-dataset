@@ -1,4 +1,4 @@
-# s4_manual_expression_data_integration.R
+ # s4_manual_expression_data_integration.R
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
@@ -11,9 +11,11 @@
 # Script strucutre
 # >>>>>>>>>>>>>>>>
 # 1. Prepare data
+
 # !!! Part 1 (cleaning) !!!!!!!!!!!!(Part 1 filtered one dataset out)!!!!!!!!!!!
 # 2. Remove NA expression values
 # 3. Convert expression data to log space
+
 # !!! Part 2 (maxvar collapsing + integration) !!!(Part 2 filtered 7 datsets out)
 # 4. Do max-var collapsing
 # 5. Genrate geo_tidy, a clean version of geo with only expression and clinical
@@ -1283,6 +1285,25 @@ head2(geo_expr)
 # Save RData !!!!!
 # save(geo_expr, file = str_c(out_data, "geo_expr.RData"))
 # save(geo_expr_meta, file = str_c(out_data, "geo_expr_meta.RData"))
+
+
+# Write_out annotation data
+# >>>>>>>>>>>>>>>>>>>>>>>>>
+
+x <- geo_expr %>%
+  dplyr::select(Ncbi_gene_id) %>%
+  dplyr::mutate(Ncbi_gene_id = str_replace(Ncbi_gene_id, "ncbi_", ""))
+x <- x %>%
+  dplyr::left_join(annot, by = "Ncbi_gene_id") %>%
+  dplyr::mutate(ID_REF = str_c("ncbi_", Ncbi_gene_id)) %>%
+  dplyr::select(ID_REF, Ncbi_gene_id, Hugo_gene_symbol, Ensembl_gene_id)
+
+identical(x$ID_REF, geo_expr$Ncbi_gene_id) # TRUE
+
+write_tsv(
+  x = x,
+  path = str_c(out_data, "geo_expr_annot.tsv")
+)
 
 #
 # ==============================================================================

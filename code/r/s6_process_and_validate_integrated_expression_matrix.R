@@ -325,7 +325,7 @@ pam50[["centroid"]] <- read_tsv(file = "data/pam50/PAM50/bioclassifier_R/pam50_c
 pam50[["annot"]] <- read_tsv(file = "data/pam50/PAM50/bioclassifier_R/pam50_annotation.txt")
 
 pam50 <- pam50$centroid %>%
-  dplyr::rename(pcrID = "X1") %>%
+  dplyr::rename(pcrID = "...1") %>%
   dplyr::left_join(pam50$annot, by = "pcrID") %>%
   dplyr::mutate(EntrezGene = str_c("ncbi_", EntrezGene)) %>%
   dplyr::filter(EntrezGene %in% expr$Ncbi_gene_id) %>%
@@ -341,7 +341,6 @@ nrow(pam50) # 36
 update_clin <- function(clin, expr, module_list, pam50){
 
 
-
   # RLE
   # >>>
 
@@ -355,7 +354,7 @@ update_clin <- function(clin, expr, module_list, pam50){
 
   rle <- bind_cols(
     tibble(Sample_geo_accession = names(x)[-1]),
-    x[, -1] %>% purrr::map_dfr(summary)
+    x[, -1] %>% purrr::map_dfr(summary) %>% purrr::map_dfr(~(as.numeric(.x)))
   ) %>%
     dplyr::rename(First_Qu = "1st Qu.",
                   Third_Qu = "3rd Qu.") %>%

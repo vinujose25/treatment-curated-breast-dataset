@@ -24,12 +24,17 @@
 # 1. Prepare data
 # ==============================================================================
 
-load("results/main/geo.RData")
+load("results/data/geo.RData")
 length(geo) #38 series matrices
 
-load("results/main/geo_series_summary.RData")
+load("results/data/geo_series_summary.RData")
 glimpse(geo_series_summary)
 
+load("results/data/geo_maxvar_annot.RData")
+length(geo_maxvar_annot)
+
+load("results/data/geo_expr_meta.RData")
+load("results/data/geo_maxvar_annot.RData")
 #
 # ==============================================================================
 
@@ -284,8 +289,8 @@ for(inme in nme){
 }
 dim(geo_clin) # 5022 429
 
-write_tsv(x = tibble(Column_name = sort(names(geo_clin))),
-          path = str_c(out_data, "geo_clin_column_name.tsv"))
+# write_tsv(x = tibble(Column_name = sort(names(geo_clin))),
+#           path = str_c(out_data, "geo_clin_column_name.tsv"))
 
 
 nme <- c(
@@ -338,6 +343,7 @@ nme <- c(
 geo_clin <- geo_clin %>% dplyr::select(all_of(nme))
 dim(geo_clin) # 5022 43
 glimpse(geo_clin)
+
 
 #
 # ==============================================================================
