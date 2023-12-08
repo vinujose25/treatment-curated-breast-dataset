@@ -1,4 +1,4 @@
-#  s3_manual_sample_characterisitic_curation.R
+#  s3_sample_characterisitic_curation.R
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>

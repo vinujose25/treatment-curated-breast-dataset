@@ -1,4 +1,4 @@
-# s1_manual_geo_search_result_curation.R
+# s1_geo_search_result_curation.R
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>

@@ -1,4 +1,4 @@
-# s5_manual_clinical_data_integration.R
+# s5_clinical_data_integration.R
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>

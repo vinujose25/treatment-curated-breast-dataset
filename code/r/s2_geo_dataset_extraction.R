@@ -1,4 +1,4 @@
-# s2_manual_geo_dataset_extraction.R
+# s2_geo_dataset_extraction.R
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>

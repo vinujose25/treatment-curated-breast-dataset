@@ -1,4 +1,4 @@
- # s4_manual_expression_data_integration.R
+ # s4_expression_data_integration.R
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
