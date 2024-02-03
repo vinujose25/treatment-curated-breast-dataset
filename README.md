@@ -1,8 +1,11 @@
 # Treatment-curated breast dataset
 
+Version 1.0.1 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10613554.svg)](https://doi.org/10.5281/zenodo.10613554) <br>
+
 Code associated with the following data curation project.
 
-## A pooled treatment-curated breast cancer gene expression dataset.
+
+## A pooled treatment-curated breast cancer gene expression dataset
 
 ### Abstract
 
