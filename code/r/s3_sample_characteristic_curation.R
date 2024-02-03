@@ -1,35 +1,37 @@
-#  s3_sample_characterisitic_curation.R
+#  s3_sample_characteristic_curation.R
+
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
+#
 # This script explains what changes are done to sample characteristics extracted
 # from each series matrix.
 #
 # Curation and annotation performed:
-# 1. Keep all original sample_characterisitcs
-# 2. Extract hidden sample characterisitcs from text and append columns.
-# 3. Whereever possible stick to the following format
+# 1. Keep all original sample_characteristics
+# 2. Extract hidden sample characteristics from text and append columns for each.
+# 3. Wherever possible stick to the following format
 #    Er. Pr, Her2, Node: pos vs neg
 #    Age: years
 #    Grade: 1-3
 #    Size: cm
 #    Histology: as is
-#    Ethinicity: as is
+#    Ethnicity: as is
 #    Time_os/rfs/ddfs/organ_specific_metastasis: years
 #    Event_os/rfs/ddfs/organ_specific_metastasis event: 1/0 event/noevent
 #
 # Note !!!!!!!!!!!!!!!
 # Take dfs: disease free survival as the merged endpoint
-# Within each merged dataset map the most releveant endpoint to dfs
+# Within each merged dataset map the most relevant endpoint to dfs
 # Eg. map dfs, dmfs, mfs, rfs to dfs
 #
 #    Response: pCR/nopCR (neoadj endpointr)
 #    Arm: radio_chemo_hormone_her2therapy (Treatment arm)
-#    Arm_description: therapy descriptoin
-#    Sampe_id1/2/3: if additional sample ids are present other than Sample_title
+#    Arm_description: therapy description
+#    Sample_id1/2/3: if additional sample ids are present other than Sample_title
 #
 #    Additional potential columns:
-#    Node_collected: no.of nodes ivestigated
+#    Node_collected: no.of nodes investigated
 #    Node_pos: no.of nodes positive
 #    Ki67: 0-100
 #    Archive_method: ffpe, freezing, rna_later
@@ -40,19 +42,20 @@
 #    Therapy_hormone: yes, no
 #    Therapy_her2: yes, no
 #    Therapy_chemo: yes, no
-#    Therapy_hormone_class: therapy given seperated by ///
-#    Therapy_her2_class: therapy given seperated by ///
-#    Therapy_chemo_class: therapy given seperated by ///
+#    Therapy_hormone_class: therapy given separated by ///
+#    Therapy_her2_class: therapy given separated by ///
+#    Therapy_chemo_class: therapy given separated by ///
 #    Timepoint: for paired data
 
 
 
-# Script strucutre
+# Script structure
 # >>>>>>>>>>>>>>>>
+#
 # 1. Prepare data
-# 2. Computational formatting of sample characterisitics of the 40 datasets selected
+# 2. Computational formatting of sample characteristics of the 40 datasets selected
 # (44 series matrices).
-# 3. Append curated sample characterisitics (Clinical data) to geo
+# 3. Append curated sample characteristics (Clinical data) to geo
 
 
 
@@ -64,8 +67,8 @@ length(geo) # 44 series matrices
 
 
 # all sample characteristic names: This is to get an overview of
-# what all sample characteristics are available and to generate a consistant
-# naming for each type of sample characterisitic
+# what all sample characteristics are available and to generate a consistent
+# naming for each type of sample characteristic
 xx <- purrr::map(geo, function(x){names(x$sample_characteristics)}) %>%
   unlist()
 names(xx) <- NULL
@@ -1013,7 +1016,7 @@ write_tsv(
 
 
 # GSE20271
-# >>>>>>>>>>>>>>>>
+# >>>>>>>>
 
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE20271.tsv")
 names(xx) <- clean_names(names(xx))
@@ -1113,7 +1116,7 @@ write_tsv(
 
 
 # GSE109710
-# >>>>>>>>>>>>>>>>
+# >>>>>>>>>
 
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE109710.tsv")
 names(xx) <- clean_names(names(xx))
@@ -2047,7 +2050,9 @@ write_tsv(
 
 
 
-# GSE16446 >>>>>>>>>>>>>>>>
+# GSE16446
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE16446.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 139
@@ -2128,7 +2133,9 @@ write_tsv(
 
 
 
-# GSE32646 >>>>>>>>>>>>>>>>
+# GSE32646
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE32646.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 115
@@ -2189,7 +2196,9 @@ write_tsv(
 
 
 
-# GSE19615 >>>>>>>>>>>>>>>>
+# GSE19615
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE19615.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 115
@@ -2326,7 +2335,9 @@ write_tsv(
 
 
 
-# GSE130786 >>>>>>>>>>>>>>>>
+# GSE130786
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE130786.tsv")
 names(xx) <- clean_names(names(xx))
 names(xx)[10] <- "Sample_type.1" # redundant coullmn name
@@ -2381,7 +2392,9 @@ write_tsv(
 
 
 
-# GSE22093 >>>>>>>>>>>>>>>>
+# GSE22093
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE22093.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 110
@@ -2440,7 +2453,9 @@ write_tsv(
 
 
 
-# GSE4779 >>>>>>>>>>>>>>>>
+# GSE4779
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE4779.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 102
@@ -2495,7 +2510,9 @@ write_tsv(
 
 
 
-# GSE114403 >>>>>>>>>>>>>>>>
+# GSE114403
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE114403.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 100
@@ -2569,7 +2586,9 @@ write_tsv(
 )
 
 
-# GSE76360 >>>>>>>>>>>>>>>>
+# GSE76360
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE76360.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 100
@@ -2629,7 +2648,9 @@ write_tsv(
 
 
 
-# GSE21997_GPL1390 >>>>>>>>>>>>>>>>
+# GSE21997_GPL1390
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE21997_GPL1390.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 35
@@ -2724,7 +2745,9 @@ write_tsv(
 
 
 
-# GSE21997_GPL5325 >>>>>>>>>>>>>>>>
+# GSE21997_GPL5325
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE21997_GPL5325.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 32
@@ -2813,7 +2836,9 @@ write_tsv(
 
 
 
-# GSE21997_GPL7504 >>>>>>>>>>>>>>>>
+# GSE21997_GPL7504
+# >>>>>>>>>>>>>>>>>
+
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE21997_GPL7504.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 31
@@ -2901,7 +2926,9 @@ write_tsv(
 
 
 
-# GSE42822 >>>>>>>>>>>>>>>>
+# GSE42822
+# >>>>>>>>>>>>>>>>
+
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE42822.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 91
@@ -2981,7 +3008,9 @@ write_tsv(
 
 
 
-# GSE66305 >>>>>>>>>>>>>>>>
+# GSE66305
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE66305.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 88
@@ -3038,7 +3067,9 @@ write_tsv(
 
 
 
-# GSE66999 >>>>>>>>>>>>>>>>
+# GSE66999
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE66999.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 76
@@ -3113,7 +3144,9 @@ write_tsv(
 
 
 
-# GSE28844 >>>>>>>>>>>>>>>>
+# GSE28844
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE28844.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
@@ -3188,7 +3221,9 @@ write_tsv(
 
 
 
-# GSE23988 >>>>>>>>>>>>>>>>
+# GSE23988
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE23988.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
@@ -3247,7 +3282,9 @@ write_tsv(
 
 
 
-# GSE18728 >>>>>>>>>>>>>>>>
+# GSE18728
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE18728.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
@@ -3316,7 +3353,9 @@ write_tsv(
 )
 
 
-# GSE21974 >>>>>>>>>>>>>>>>
+# GSE21974
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE21974.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
@@ -3398,7 +3437,9 @@ write_tsv(
 )
 
 
-# GSE143222 >>>>>>>>>>>>>>>>
+# GSE143222
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE143222.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 61
@@ -3456,7 +3497,9 @@ write_tsv(
 
 
 
-# GSE16391 >>>>>>>>>>>>>>>>
+# GSE16391
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE16391.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 55
@@ -3564,7 +3607,9 @@ write_tsv(
 
 
 
-# GSE75678 >>>>>>>>>>>>>>>>
+# GSE75678
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE75678.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 54
@@ -3705,7 +3750,9 @@ names(table(unlist(yy)))
 
 
 
-# GSE55348 >>>>>>>>>>>>>>>>
+# GSE55348
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE55348.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 53
@@ -3768,7 +3815,9 @@ write_tsv(
 
 
 
-# GSE8465_GPL1390 >>>>>>>>>>>>>>>>
+# GSE8465_GPL1390
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE8465_GPL1390.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 2
@@ -3871,7 +3920,9 @@ write_tsv(
 
 
 
-# GSE8465_GPL887 >>>>>>>>>>>>>>>>>
+# GSE8465_GPL887
+# >>>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE8465_GPL887.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 44
@@ -4021,7 +4072,9 @@ write_tsv(
 
 
 
-# GSE143846 >>>>>>>>>>>>>>>>
+# GSE143846
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE143846.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 44
@@ -4075,7 +4128,9 @@ write_tsv(
 
 
 
-# GSE55374 >>>>>>>>>>>>>>>>
+# GSE55374
+# >>>>>>>>>>>>>>>>
+#
 xx <- read_tsv(file = "results/data/curated_clinical_data/GSE55374.tsv")
 names(xx) <- clean_names(names(xx))
 glimpse(xx) # 36

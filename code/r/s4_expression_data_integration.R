@@ -1,15 +1,18 @@
- # s4_expression_data_integration.R
+# s4_expression_data_integration.R
+
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
-# 1. Cleaning: removing genes with at leans one NA, log space converion
-# 2. Max-var collapsing: Multiple probes representing same gene is collpased
-# by using the maximum varient probe#
+#
+# 1. Cleaning: removing genes with at leans one NA, log space conversion
+# 2. Max-var collapsing: Multiple probes representing same gene is collapsed
+#    - by using the maximum variant probe#
 # 3. Integrate multiple dataset using common genes
 
 
-# Script strucutre
+# Script structure
 # >>>>>>>>>>>>>>>>
+
 # 1. Prepare data
 
 # !!! Part 1 (cleaning) !!!!!!!!!!!!(Part 1 filtered one dataset out)!!!!!!!!!!!
@@ -18,8 +21,8 @@
 
 # !!! Part 2 (maxvar collapsing + integration) !!!(Part 2 filtered 7 datsets out)
 # 4. Do max-var collapsing
-# 5. Genrate geo_tidy, a clean version of geo with only expression and clinical
-# slots to hold max-var collaped expression data and cleaned clinical data.
+# 5. Generate geo_tidy, a clean version of geo with only expression and clinical
+# slots to hold max-var collapsed expression data and cleaned clinical data.
 # 6. Expression data integration
 
 

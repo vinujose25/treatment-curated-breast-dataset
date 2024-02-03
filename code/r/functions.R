@@ -1,19 +1,23 @@
-# geo_gse_curation_fun.R
+# functions.R
 
 unique_names <- function(x){
 
+
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
-  # The functions ensures that the extracted sample characterisitcs names
-  # are unique. Redundancy is corrected by addig 1,2,3 etc as suffix to
-  # redundant characterisitics names.
+  #
+  # The functions ensures that the extracted sample characteristics names
+  # are unique. Redundancy is corrected by adding 1,2,3 etc as suffix to
+  # redundant characteristics names.
 
   # input
   # >>>>>
+  #
   # x: Character vector of column names (can contain redundant column name)
 
   # output
   # >>>>>>
+  #
   # A character vector of unique column name
 
   x_count <- table(x)
@@ -31,49 +35,54 @@ unique_names <- function(x){
   return(x)
 }
 
+
+
 get_row_range <- function(file, n_max = 250){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
-  # The series matrix consolidates multi level data into a single file.
+  #
+  # The series matrix consolidates multilevel data into a single file.
   # The multiple levels were series, sample and expression data.
   # The expression data is readily distinguishable by data read functions
   # (such as "read_csv") when the comment option is used, as all other metadata
   # (series and sample) in the series matrix start with the character "!".
   # Hence by setting comment == "!", the expression data can be read automatically.
   # However there is no way to distinguish series and sample data, except
-  # a blank line that seperates them. Hence to automate reading in series and
+  # a blank line that separates them. Hence to automate reading in series and
   # sample data, the skip and n_max options of data read functions (eg. read_csv)
   # must be utilized. This script identifies the correct row ranges (i.e. no.of
   # rows to skip and maximum no of rows to read) of series and
-  # sample data, by exploiting the blank line that seperates them.
-
+  # sample data, by exploiting the blank line that separates them.
 
   # input
   # >>>>>
+  #
   # file: Character path to compressed series matrix.
   #       To feed into read_tsv() function.
   # n_max: An increment to be feed into read_tsv() function to read the
   #       compressed series matrix. The idea of n_max is to ensure that
   #       minimal data is read into R (and no expression data) to  extract
-  #       row indices of series and sample data. Reding of entire series matrix
+  #       row indices of series and sample data. Reading of entire series matrix
   #       costs performance issue and is not necessary to read in all expression
-  #       data to extract rown ranges of series or sample data.
+  #       data to extract row ranges of series or sample data.
   #       If the row ranges cannot be found in first n_max lines
-  #       of data, then the algorithm repeats by dobuling n_max. This will go on
-  #       unitl n_max reaches 2000 lines, a hard cutoff to prevent indefinite
+  #       of data, then the algorithm repeats by doubling n_max. This will go on
+  #       until n_max reaches 2000 lines, a hard cutoff to prevent indefinite
   #       looping. It is highly unlikely that a series matrix may contain >1000
-  #       sample characterisitics (+series data).
+  #       sample characteristics (+series data).
 
   # output
   # >>>>>>
+  #
   # List of no.of lines to skip ("skip" option) and maximum line to read
-  # ("n_max" opyion) to extract series and sample data.
+  # ("n_max" option) to extract series and sample data.
 
 
 
 
-  # While loop is to accomodate the unexpected scenario of
+  # While loop is to accommodate the unexpected scenario of
   # -more than 250 lines of series and sample characteristics.
 
   while (n_max < 2000) {
@@ -140,25 +149,30 @@ get_row_range <- function(file, n_max = 250){
 
 }
 
+
 get_var_name <- function(x){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
-  # The sample characterisitcs extracted from series matrix usually have
-  # the column name "Sample_characterisitcs_ch1" (or"_ch2" if dual channel).
-  # The actual charcaterisitc name is encoded in the value as
-  # "characterisitc-name:characterisicts-value". This function extracts
-  # the characterisitics name. The function exploits the format of colon
-  # sperated characterisitcs name and value pair for extracting chracterisitcs name.
+  #
+  # The sample characteristics extracted from series matrix usually have
+  # the column name "Sample_characteristics_ch1" (or"_ch2" if dual channel).
+  # The actual characteristic name is encoded in the value as
+  # "characteristic-name:characteristics-value". This function extracts
+  # the characteristics name. The function exploits the format of colon
+  # separated characteristics name and value pair for extracting characteristics name.
 
 
 
   # input
   # >>>>>
-  # x: A tibble of sample characterisitics to extract the chracterisitics names
+  #
+  # x: A tibble of sample characteristics to extract the characteristics names
 
   # output
   # >>>>>>
+  #
   # A character vector of extracted names
 
 
@@ -166,7 +180,7 @@ get_var_name <- function(x){
     purrr::map_chr(
       function(xx){
 
-        # colon seperate characteristic name and value
+        # colon separate characteristic name and value
         no_colon <- xx %>% str_detect(":", negate = TRUE) %>% all()
         if(is.na(no_colon)){ # empty cell value generate NA
           no_colon = TRUE
@@ -190,12 +204,12 @@ get_var_name <- function(x){
           # Error log
           # >>>>>>>>>
 
-          # # The logic of picking the max occured characteristic name as column name,
+          # # The logic of picking the max occurred characteristic name as column name,
           # # seems complicated; hence removed.
           # xx <- table(xx)
-          # # expecting the max occurance as column name
-          # # This is to accomodate inconsistancy arise due to missingness in some columns,
-          # # as this will caue the column values to shift left and ending up in entirely
+          # # expecting the max occurrence as column name
+          # # This is to accommodate inconsistency arise due to missingness in some columns,
+          # # as this will cause the column values to shift left and ending up in entirely
           # #  different column.
           # return(names(xx)[xx == max(xx)])
 
@@ -214,36 +228,40 @@ get_var_name <- function(x){
   return(unique_names(nme)) # unique names append .123 for redundant names
 }
 
+
 get_var_qc <- function(x){
 
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
-  # The sample characterisitcs extracted from series matrix usually have
-  # the column name "Sample_characterisitcs_ch1" (or"_ch2" if dual channel).
-  # The actual charcaterisitc name is encoded in the value as
-  # "characterisitc-name:characterisicts-value". This function checks
-  # the expected behavious and if it fails rais a flag for that
-  # characterisitcs column. The checks performed were:
-  # 1) The presence of ":" that seperates characterisitcs name and value.
+  #
+  # The sample characteristics extracted from series matrix usually have
+  # the column name "Sample_characteristics_ch1" (or"_ch2" if dual channel).
+  # The actual characteristic name is encoded in the value as
+  # "characteristic-name:characteristics-value". This function checks
+  # the expected behaviors and if it fails raises a flag for that
+  # characteristics column. The checks performed were:
+  # 1) The presence of ":" that separates characteristics name and value.
   # 2) The presence of unique characteristics name.
   # The reason for the second check is that if any of the value for a
-  # sample characterisitic is missing and is not encoded as NAs, the entire
-  # row (samples on rows and characterisic on columns) towards the right of the
+  # sample characteristic is missing and is not encoded as NAs, the entire
+  # row (samples on rows and characteristic on columns) towards the right of the
   # missing value shifts to the left n no.of times, where n is the no.of missing
   #  values that is not encoded as NAs. This problem creates curation issues and
   #  consumes lot of time if do it manually for all series matrices.
-  #  With the inclution of variable qc checks, the curator can focus only on
+  #  With the inclusion of variable qc checks, the curator can focus only on
   #  the flagged datasets/columns.
 
 
   # input
   # >>>>>
-  # x: A tibble of sample characterisitics to extract the chracterisitics names
+  #
+  # x: A tibble of sample characteristics to extract the characteristics names
 
   # output
   # >>>>>>
-  # A logical vector of characterisitics QC values.
+  #
+  # A logical vector of characteristics QC values.
 
 
 
@@ -278,25 +296,30 @@ get_var_qc <- function(x){
   return(qc)
 }
 
+
 format_geo <- function(files){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # This script extracts series, sample and expression data from series matrix file.
-  # Curate the sample characteristics computationally and unexpected behaviours
-  # in sample characterisitcs will be flagged for manual intervention.
+  # Curate the sample characteristics computationally and unexpected behaviors
+  # in sample characteristics will be flagged for manual intervention.
 
 
   # input
   # >>>>>
+  #
   # file: Character path to compressed series matrix. To feed into read_tsv() function.
 
 
   # output
   # >>>>>>
+  #
   # Output is a list containing series, sample, expression,
-  # curated sample characterisitics, and a flag denoting whether there are
-  # issues in sample characterisitics(Yes means there are issues).
+  # curated sample characteristics, and a flag denoting whether there are
+  # issues in sample characteristics (Yes means there are issues).
 
 
 
@@ -481,18 +504,23 @@ format_geo <- function(files){
 
 } # end main function
 
+
 clean_names <- function(x){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # Cleans the input character vector, by trimming and removing space.
 
   # input
   # >>>>>
+  #
   # x: Character vector of column names or others
 
   # output
   # >>>>>>
+  #
   # A character vector of cleaned names
 
   x %>%
@@ -501,20 +529,23 @@ clean_names <- function(x){
     str_to_sentence()
 }
 
+
 # updated t_tibble()
 t_tibble <- function(x, names_x_desc = NULL){
 
+
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # Tranposes a gene expression tibble.
-  # By definition, row names are not recommanded for tibble, instead any
+  # By definition, row names are not recommended for tibble, instead any
   # rowname must be included as a column in the tibble. For instance the
   # as_tibble() function has "rownames" option to give names for existing rownames
-  # so as to include the rownames as the first colum of a tibble. However,
+  # so as to include the rownames as the first column of a tibble. However,
   # rownames are conventional and usually included in a tibble as the first column.
   # In this case, the default transpose function may not work properly as
   # transposing a tibble may cause data type conflicts and may convert the
-  # entrire colum of a transposed tibble as the with the type of first column of
+  # entire column of a transposed tibble as the with the type of first column of
   # non-transposed tibble. This will be case with gene expression tibbles with
   # first column as gene symbols, and column names are sample names.
   # Note that this function is defined to use with gene expression tibbles.
@@ -523,6 +554,7 @@ t_tibble <- function(x, names_x_desc = NULL){
 
   # input
   # >>>>>
+  #
   # x: A tibble to transpose. The 1st column is considered as rownames.
   # names_x_desc: A character string that describes what names(x) represents.
   #               This character string will be used as the name of the first
@@ -530,6 +562,7 @@ t_tibble <- function(x, names_x_desc = NULL){
 
   # output
   # >>>>>>
+  #
   # A transposed tibble
 
 
@@ -550,16 +583,20 @@ t_tibble <- function(x, names_x_desc = NULL){
   return(as_tibble(tx, rownames = names_x_desc))
 }
 
+
 # updated get_max_var_annot()
 get_max_var_annot <- function(ge, xannot, pset_colname, gene_colname){
 
+
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
-  # Identifies the maximum vartient probe/probeset representing a single gene and
+  #
+  # Identifies the maximum Vientiane probe/probeset representing a single gene and
   # its annotation.
 
   # input
   # >>>>>
+  #
   # ge: Gene expression tibble with probe/probeset id as the first column and
   #     column names as sample names (names(ge)).The name of the probe/probeset id column
   #     must be the value of "pset_colname".
@@ -572,7 +609,8 @@ get_max_var_annot <- function(ge, xannot, pset_colname, gene_colname){
 
   # output
   # >>>>>>
-  # A tibble representing annotation of maximum varient prode/probeset.
+  #
+  # A tibble representing annotation of maximum variant prode/probeset.
 
 
   # Converting all relevant ids to character
@@ -670,10 +708,13 @@ get_max_var_annot <- function(ge, xannot, pset_colname, gene_colname){
 
 }
 
+
 head2 <- function(x, n = 5){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # head() will display first 6 rows of a dataframe and all columns irrespective of
   # no.of columns by default. This function will control it by letting the user
   # specify it. Along with a glimpse of a dataframe, this function also prints
@@ -682,11 +723,13 @@ head2 <- function(x, n = 5){
 
   # input
   # >>>>>
+  #
   # x: A tibble or dataframe
   # n: The no.of columns and rows to printout.
 
   # output
   # >>>>>>
+  #
   # A list of subset of the input (head) and its dimension (dim).
 
 
@@ -695,13 +738,18 @@ head2 <- function(x, n = 5){
   list(head = x[1:ridx, 1:cidx], dim = dim(x))
 }
 
+
 tiff2 <- function(file = "Rplot.tiff", width = 7.5, height = 7.5){
+
+
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # To set useful defaults for tiff()
 
   # input
   # >>>>>
+  #
   # file: Character string representing file name to save the figure.
   #        This input will be feed into tiff() function.
   # width: Width of the figure in inches.
@@ -711,19 +759,24 @@ tiff2 <- function(file = "Rplot.tiff", width = 7.5, height = 7.5){
 
   # output
   # >>>>>>
+  #
   # A tiff file device to plot into.
 
   tiff(filename = file, width = width, height = height, res = 150, units = "in")
 }
 
+
 pdf2 <- function(file = "Rplot.pdf", width = 7.5, height = 7.5, onefile = TRUE){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # To set useful defaults for pdf()
 
   # input
   # >>>>>
+  #
   # file: Character string representing file name to save the figure.
   #        This input will be feed into tiff() function.
   # width: Width of the figure in inches.
@@ -735,19 +788,24 @@ pdf2 <- function(file = "Rplot.pdf", width = 7.5, height = 7.5, onefile = TRUE){
 
   # output
   # >>>>>>
+  #
   # A pdf file device to plot into.
 
   pdf(file = file, width = width, height = height, onefile = onefile)
 }
 
+
 get_module_score <- function(x, module_list, by = "Entrez_Gene"){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # Compute gene module score as a weighted average
 
   # input
   # >>>>>
+  #
   # x: A tibble with genes on column and samples on rows.
   #     1st column is considered as sample names.
   # module_list: List of gene modules. Each gene module must contain at least
@@ -766,6 +824,7 @@ get_module_score <- function(x, module_list, by = "Entrez_Gene"){
 
   # output
   # >>>>>>
+  #
   # A tibble of module score. Column names represnts module names and the 1st
   # column contains sample ids.
 
@@ -802,10 +861,13 @@ get_module_score <- function(x, module_list, by = "Entrez_Gene"){
 
 }
 
+
 dataset_gene_scaling <- function(x, dataset_map){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # Performs a per dataset quntile gene rescaling using rescale() function
   # available from genefu R package. The rescaling is performed gene wise
   # (i.e. row wise)with q = 0.05 as the input to rescale function.
@@ -813,6 +875,7 @@ dataset_gene_scaling <- function(x, dataset_map){
 
   # input
   # >>>>>
+  #
   # x: A tibble of pooled dataset with genes on rows and samples
   #     on column. The first column contains gene ids.
   #     This function is defined to used with pooled GEO dataset, hence
@@ -824,6 +887,7 @@ dataset_gene_scaling <- function(x, dataset_map){
 
   # output
   # >>>>>>
+  #
   # A tibble of per dataset rescaled gene expression values (gene wise/row wise).
 
 
@@ -852,17 +916,21 @@ dataset_gene_scaling <- function(x, dataset_map){
 
 }
 
+
 global_gene_scaling <- function(x){
+
 
   # What this function does?
   # >>>>>>>>>>>>>>>>>>>>>>>>
-  # Performs quntile gene rescaling in the pooled dataset using rescale() function
+  #
+  # Performs quantile gene rescaling in the pooled dataset using rescale() function
   # available from genefu R package. The dataset id is ignored in this function and
   # the scaling performed on the pooled dataset.The rescaling is performed gene wise
   # (i.e. row wise) with q = 0.05 as the input to rescale function.
 
   # input
   # >>>>>
+  #
   # x: A tibble of pooled dataset with genes on rows and samples
   #     on column. The first column contains gene ids.
   #     This function is defined to used with pooled GEO dataset, hence
@@ -871,6 +939,7 @@ global_gene_scaling <- function(x){
 
   # output
   # >>>>>>
+  #
   # A tibble of rescaled gene expression values (gene wise / row wise).
 
 
@@ -886,9 +955,20 @@ global_gene_scaling <- function(x){
 
 }
 
+
 explore_na <- function(xx){
-  #Function to explore NAs in an expression matrix per gene and per sample
-  #xx: expresison matrix tibble; first column ID_REF contains probeset ids
+
+
+  # What this function does?
+  # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
+  # Function to explore NAs in an expression matrix per gene and per sample
+
+  # input
+  # >>>>>
+  #
+  # xx: expresison matrix tibble; first column ID_REF contains probeset ids
+
   print("sample")
   idx_sample <- purrr::map_lgl(xx, ~(any(is.na(.x))))
   print("gene")
@@ -897,9 +977,19 @@ explore_na <- function(xx){
   return(list(na_sample = idx_sample, na_gene = idx_gene))
 }
 
+
 get_patient_summary <- function(xx1){
 
+  # What this function does?
+  # >>>>>>>>>>>>>>>>>>>>>>>>
+  #
   # Function to generate patient summary
+
+
+  # input
+  # >>>>>
+  #
+  # xx1: tibble of patient characteristics
 
   bind_rows(
 

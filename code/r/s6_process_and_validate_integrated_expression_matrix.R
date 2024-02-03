@@ -1,24 +1,31 @@
 # s6_process_and_validate_integrated_expression_matrix
 
+
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
-# Dataset effect correction method comparison.
-#   original(log2) vs
-#   combat(log2 + combat) vs
-#   quantile(log2 + per dataset quantile gene scaling) vs
-#   mad_quantile(log2 + mad sample scaling + per dataset quantile gene scaling)
-#     correction of pooled expression data w.r.t
-#   1) RLE plots (save plots)
-#   2) PAM50 vs Subtype-IHC Kappa agreement
-#   3) ER/HER2 IHC status prediction ability (AUC) (save plots)
+#
+# 1. Dataset effect correction method comparison.
+#
+#    Compare the following dataset effect correction methods
+#    a. original (log2) vs
+#    b. combat(log2 + combat) vs
+#    c. quantile (log2 + per dataset quantile gene scaling) vs
+#    d. mad_quantile (log2 + mad sample scaling + per dataset quantile gene scaling)
+#
+#    with respect to the  following metrics from each version of corrected dataset
+#
+#    a. RLE plots (save plots)
+#    b. PAM50 vs Subtype-IHC Kappa agreement
+#    c. ER/HER2 IHC status prediction ability (AUC) (save plots)
 
 
-# Script strucutre
+# Script structure
 # >>>>>>>>>>>>>>>>
+#
 # 1. Prepare data
 # 2. Compute list of dataset effect corrected data
 # 3. Compute list of clinical data with respective qc metrics from corrected data
-# 4. generate and disply rle plots a  nd other tables
+# 4. generate and display rle plots a  nd other tables
 
 
 
@@ -29,7 +36,7 @@ load("results/data/geo_expr.RData")
 load("results/data/geo_clin.RData")
 
 
-# Data-metadata congrence
+# Data-metadata congruence
 # >>>>>>>>>>>>>>>>>>>>>>>
 
 clin <- geo_clin %>% dplyr::filter(Has_expr_pooled == "yes")
@@ -249,7 +256,7 @@ geo_expr_list %>% purrr::map(dim)
 
 # Save dataset effect corrected data list !!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-save(geo_expr_list, file = str_c(out_data, "geo_expr_list.RData"))
+# save(geo_expr_list, file = str_c(out_data, "geo_expr_list.RData"))
 
 #
 # ==============================================================================
@@ -544,7 +551,7 @@ geo_clin_list %>% purrr::map(dim)
 
 # Save qc metrics associated with dataset effect correction methods !!!!!!!!!!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-save(geo_clin_list, file = str_c(out_data, "geo_clin_list.RData"))
+# save(geo_clin_list, file = str_c(out_data, "geo_clin_list.RData"))
 
 #
 # ==============================================================================

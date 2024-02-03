@@ -1,22 +1,25 @@
 # s5_clinical_data_integration.R
 
+
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
-# Integrate clinical data avaialable from geo.RData
-# Treatment regimen clssification
-# Then split out the integrated clinical data and
-# populate the clinical slot of geo_tidy object.
+#
+# 1. Integrate clinical data available from geo.RData
+# 2. Treatment regimen classification
+# 3. Then split out the integrated clinical data and populate the clinical slot
+#    - of geo_tidy object.
 
 
-# Script strucutre
+# Script structure
 # >>>>>>>>>>>>>>>>
+#
 # 1. Prepare data
 # 2. Generate series matrix summary and integrate series summary into it
-# (This is to update integrated clinical data with sample procrument and
-# preservation info later)
+#    (This is to update integrated clinical data with sample procurement and
+#    - preservation info later)
 # 3. Integrate clinical data with relevant characteristics
-# 4. Dissect treatment regiment and reclassify regimen in a consistant way
-# 5. Update integrated clinical data with sample preocrument and preservation details
+# 4. Dissect treatment regiment and reclassify regimen in a consistent way
+# 5. Update integrated clinical data with sample procurement and preservation details
 # 6. Split out integrated clinical data and populate clinical slot of geo_tidy
 
 
@@ -42,8 +45,8 @@ load("results/data/geo_maxvar_annot.RData")
 
 
 # 2. Generate series matrix summary and integrate series summary into it
-# (This is to update integrated clinical data with sample procrument and
-# preservation info later)
+#    (This is to update integrated clinical data with sample procrument and
+#    - preservation info later)
 # ==============================================================================
 
 

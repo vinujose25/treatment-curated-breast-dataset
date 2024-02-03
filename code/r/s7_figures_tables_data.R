@@ -3,27 +3,29 @@
 
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
-# Write out dataset effect corrected data in tsv format.
-# Write out matching clinical data with qc metrics and clinico-patho variables.
-# Genrate RLE plots, AUC table, Kappa table related to dataset effect comaprison
-# Genrate patient characterisitics and drug-class summary.
-# Note that the study flow chart and the integrated script structure + study flow chart
-# figures are created in "LibreOffice Draw"
+#
+# 1. Write out dataset effect corrected data in tsv format.
+# 2. Write out matching clinical data with qc metrics and clinico-patho variables.
+# 3. Generate RLE plots, AUC table, Kappa table related to dataset effect comparison
+# 4. Generate patient characteristics and drug-class summary.
+# 5. Note that the study flow chart and the integrated script structure + study flow chart
+#    figures are created in "LibreOffice Draw"
 
 
-# Script strucutre
+# Script structure
 # >>>>>>>>>>>>>>>>
+#
 # 1. Prepare data
 # 2. Write out data as tsv files
-# 3. Genrate RLE plots
+# 3. Generate RLE plots
 # 4. Compute Cohen's Kappa and generate table plot
 # 5. Compute ROC AUC and generate table plot
 # 6. Summarize patient characteristics and generate table plot
 # 7. Summarize drug classes and generate table plot
-# 8. Summarize non relevant patient characterisitics
-# 9. Genarate a table containing GEO search with series details,
-# selected/rejected flag, reason for rejection.
-# 10. Comapre curatedBreastData package with present study
+# 8. Summarize non relevant patient characteristics
+# 9. Generate a table containing GEO search with series details,
+#    - selected/rejected flag, reason for rejection.
+# 10. Compare curatedBreastData package with present study
 
 
 
@@ -1209,141 +1211,6 @@ write.xlsx(x = dataset_comparison$Both_detect_planey_only_integrate %>% as.data.
            file = str_c(out_tables, "table_dataset_comparison_Planey_vs_Prenset.xlsx"),
            sheetName="Both_detect_planey_only_integrate",
            append = TRUE)
-
-
-# Backup old code
-# >>>>>>>>>>>>>>>
-
-# # a. Create a comprehensive list of all series matrices present in both studies
-# # b. Create a summary table of series matrices present in
-# # current study and curatedBreastData
-# # c. Manually curate datasets unique to curatedBreastData
-#
-#
-#
-# # planey
-# # planey_annot
-#
-# glimpse(planey)
-# # relevant variables
-# # $ study_ID                                       <int> 32646, 32646, 32646, 32646, 32…
-# # $ patient_ID                                     <int> 809184, 809185, 809186, 809187…
-# # $ GEO_GSMID                                      <int> 809184, 809185, 809186, 809187…
-#
-# planey_annot[1:5,]
-# # 1 dbUniquePatient… Unique patient id created for this database.
-# # 2 study_ID         GEO GSE study ID.
-# # 3 patient_ID       patient ID used in phenoData, expression matrix.
-# # 4 GEO_GSMID        GEO GSM patient (sample) ID. Often the same as patient ID, most samp…
-# # 5 platform_ID      general platform ID.
-#
-# identical(planey$patient_ID, planey$GEO_GSMID) # TRUE
-#
-#
-#
-# dim(planey) # 2719 139
-#
-# planey <- planey %>%
-#   dplyr::mutate(Series_accession = str_c("GSE", study_ID), # used for merging
-#                 Series_accession_curatedBreastData = Series_accession,
-#                 Series_selected_curatedBreastData = "yes") %>%
-#   dplyr::select(Series_accession, Series_accession_curatedBreastData,
-#                 Series_selected_curatedBreastData) %>%
-#   dplyr::distinct(Series_accession, .keep_all = TRUE)
-#
-# dim(planey) # 24 3
-#
-#
-#
-#
-# dataset_comparison <- list()
-#
-# # # a. Create a comprehensive list of all series matrices present in both studies
-# # # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# #
-# # # Get pooled sereis accession from both studies and merge details from
-# # # independet studies to it.
-# # id <- c(dataset_summary$Series_accession, planey$Series_accession) %>% unique()
-# # id %>% length() # 183
-# #
-# #
-# # dataset_comparison [["Comprehensive_list"]]<- left_join(
-# #   tibble(Series_accession = id),
-# #   dataset_summary %>%
-# #     dplyr::mutate(Series_accession_present_study = Series_accession) %>%
-# #     dplyr::rename(Series_selected_present_study = "Series_selected",
-# #                   Series_status_present_study = "Series_status",
-# #                   Series_comment_present_study = "Series_comment") %>%
-# #     dplyr::select(Series_accession,
-# #                   Series_accession_present_study,
-# #                   Series_selected_present_study,
-# #                   Series_status_present_study,
-# #                   Series_comment_present_study),
-# #   by = "Series_accession"
-# # ) %>% left_join(
-# #   planey,
-# #   by = "Series_accession"
-# # )
-# #
-# # glimpse(dataset_comparison$Comprehensive_list)
-#
-#
-#
-# # b. Create a summary table of series matrices present in
-# # current study and curatedBreastData
-# # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#
-# dataset_comparison [["PresentData_vs_curatedBreastData"]] <-
-#   dataset_comparison$Comprehensive_list %>%
-#   dplyr::group_by(Series_selected_present_study,
-#                   Series_selected_curatedBreastData) %>%
-#   dplyr::summarise(Dataset_count = n())
-# #   Series_selected_present_study Series_selected_curatedBreastData     N
-# # 1 no                            yes                                   3
-# # 2 no                            NA                                  141
-# # 3 yes                           yes                                  10
-# # 4 yes                           NA                                   18
-# # 5 NA                            yes                                  11
-#
-#
-#
-#
-# # Manually curate the 11 studies unique to curatedBreastData
-# # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#
-# # write_tsv(x = dataset_comparison %>%
-# #             dplyr::filter(is.na(Series_selected_present_study)) %>%
-# #             dplyr::select(Series_accession_curatedBreastData),
-# #           path = str_c(out_tables, "table_datasets_unique_to_curatedBreastData.tsv"))
-#
-# # loading curated dataset
-# dataset_comparison [["Unique_curatedBreastData"]] <-
-#   read_delim(
-#   file = str_c(out_tables, "table_datasets_unique_to_curatedBreastData_curated.tsv"),
-#   delim = "\t"
-# ) %>%
-#   dplyr::select(1:3)
-#
-#
-# names(dataset_comparison)
-# # [1] "Comprehensive_list"               "PresentData_vs_curatedBreastData"
-# # [3] "Unique_curatedBreastData"
-#
-#
-# # Write out table
-# write_tsv(
-#   x = dataset_comparison$Comprehensive_list,
-#   path = str_c(out_tables, "table_dataset_comparison_comprehensive_list.tsv")
-# )
-# write_tsv(
-#   x = dataset_comparison$PresentData_vs_curatedBreastData,
-#   path = str_c(out_tables, "table_dataset_comparison_presentData_vs_curatedBreastData.tsv")
-# )
-# write_tsv(
-#   x = dataset_comparison$Unique_curatedBreastData,
-#   path = str_c(out_tables, "table_dataset_comparison_unique_curatedBreastData.tsv")
-# )
-# # Merge the above 3 tables into one excel file.
 
 
 #

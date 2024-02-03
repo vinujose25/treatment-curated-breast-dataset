@@ -1,19 +1,22 @@
 # s1_geo_search_result_curation.R
 
+
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
-# Curate the search result text file from geo computationally and
-# convert it into a table strucutre(geo_series_summary) for easy manual annotation.
+#
+# Curate the search results (text file) from geo computationally and
+# - convert it into a table structure (geo_series_summary) for easy manual annotation.
 # Manually annotate "geo_series_summary" with information related to
-# regimen/arm, sample procrument method, sample archival method,
-# whether selected for further processing etc. for each series matrix.
+# - regimen/arm, sample procurement method, sample archival method,
+# - whether selected for further processing etc., for each series matrix.
 
 
 # Script strucutre
 # >>>>>>>>>>>>>>>>
-# 1. Curate computationally, the geo search results exported from geo as a text file.
+#
+# 1. Curate computationally, the geo search results exported from geo (text file).
 # 2. Write out the curated geo_search_result for the manual annotation with regimen,
-# sample procrument method, archival method etc.
+#    - sample procrument method, archival method etc.
 # 3. Load and save the curated and annotated series matrix summary.
 
 
@@ -40,8 +43,8 @@ geo_series_summary <- tibble(
 )
 
 
-# xx$X1 = "1. Drug-induced change in gene expression across NCI-60 cell line"
 # The following code will identify the no.of serieses identified by geo search
+#
 yy <- str_split_fixed(xx$X1, pattern = "\\. ", n = 2)[,1]
 yy <- as.integer(yy)
 table(is.na(yy))
@@ -84,8 +87,8 @@ sum(geo_series_summary$Sample_size) # 37497
 # sample procrument method, archival method etc.
 # ==============================================================================
 
-# Write out "geo_series_summary" for manual annotation !!!!!!!!!!!!!!!!!!!!!!!!!
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# Write out "geo_series_summary" for manual annotation
+#
 write_tsv(
   x = geo_series_summary,
   path = str_c(
@@ -93,11 +96,15 @@ write_tsv(
     "geo_search_taxane.antracyclin.breast_31july2020_SearchResult_curated.tsv"
   )
 )
-# !!!!!! Manual annotation !!!!!!!!!!!!!!
+
+# Manual annotation
+# >>>>>>>>>>>>>>>>>
+#
 # Annotate "geo_series_summary" manually with information related to
-# regimen/arm, sample procrument method, sample archival method,
-# whether selected for further processing etc. Save the contents as
-# geo_series_summary_taxane.antracyclin.breast_31july2020_SearchResult_annotated.tsv
+# - regimen/arm, sample procurement method, sample archival method,
+# - whether selected for further processing etc.
+# Save the contents as
+# "geo_search_taxane.antracyclin.breast_31july2020_SearchResult_annotated.tsv"
 
 #
 # ==============================================================================
@@ -108,8 +115,8 @@ write_tsv(
 # 3. Load and save the curated and annotated series matrix summary.
 # ==============================================================================
 
-# Load annotated geo_series_summary !!!!!!!!!!!
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# Load annotated geo_series_summary
+#
 geo_series_summary <- read_tsv(
   file = str_c(
     out_tables,

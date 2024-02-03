@@ -1,31 +1,34 @@
 # s2_geo_dataset_extraction.R
 
+
 # What the script does?
 # >>>>>>>>>>>>>>>>>>>>>
-# 1. Compuational extraction of series, sample and expression data from each
-# geo series matrices.
-# 2. For sample characterisitcs which are failed to format(curate) compuateionally,
-# do a manual curation.
+#
+# 1. Computational extraction of series, sample and expression data from each
+#    - geo series matrices.
+# 2. For sample characteristics which are failed to format(curate) computationally,
+#    - do a manual curation.
 # 3. Manual formatting performed:
-# 3.1. Changing charcteristic names (column names)
-# 3.2. Correcting mis-alinged samples_characterisitcs spreadsheet-cells due to
-#     missingness.
-# 3.3. Removing the concatenated characterisitcs name to each value.
+#   3.1. Changing characteristic names (column names)
+#   3.2. Correcting mis-aligned samples_characteristics spreadsheet-cells due to
+#        - missingness.
+#   3.3. Seperating the concatenated characteristics name to each value.
 
 
-# Script strucutre
+# Script structure
 # >>>>>>>>>>>>>>>>
-# 1. Compuational extraction of series, sample and expression data from each
-# geo series matrices.
+#
+# 1. Computational extraction of series, sample and expression data from each
+#    - geo series matrices.
 # 2. Manual formatting of var_qc_failed_sample_characteristics
-# 3. Append the formatted(curated) sample characterisitics to geo object
-# 4. Backup: Unexpected behaviours or  bugs in format_geo() which are resolved.
+# 3. Append the formatted(curated) sample characteristics to geo object
+# 4. Backup: Unexpected behaviors or  bugs in format_geo() which are resolved.
 
 
 
 
-# 1. Compuational extraction of series, sample and expression data from each
-# geo series matrices.
+# 1. Computational extraction of series, sample and expression data from each
+#    - geo series matrices.
 # =============================================================================
 
 
@@ -47,8 +50,8 @@ names(geo) <-  str_split_fixed(names(geo),"/", 3)[, 3] %>%
 # ==============================================================================
 
 
-# Identify series matrices with issues with sample characterisitics
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Identify series matrices with issues with sample characteristics
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 table(purrr::map_chr(geo, ~(.x$dataset_issues)))
 # No Yes
@@ -64,31 +67,21 @@ nme <- names(geo)[purrr::map_chr(geo, ~(.x$dataset_issues)) == "Yes"]
 
 
 
-# Delete comment !!!!!!!!!!!!!!!!!!!!!!!!!!
-# # For the below series, already processed data present in
-# # "results/geo/var_qc_failed_sample_characteristics" is used
-#
-# # "GSE20194" "GSE20271"           "GSE41998"           "GSE50948"
-# # "GSE6861"  "GSE25066"
-# End delete comment !!!!!!!!!!!!!!!!!!!!!!
-
-
-
-# Write out sample characterisitcs along with complete sample data
-# for manuall curation.
+# Write out sample characteristics along with complete sample data
+# for manual curation.
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 for(inme in nme){
   # Full sample data is written out for reference to identify problem in
-  # sample characterisitcs if necessary.
+  # sample characteristics if necessary.
   write_tsv(
     geo[[inme]]$sample,
     path = str_c(out_data, inme, "_sample.tsv")
   )
 
   # Sample characteristics data of series matrices for which atleast one
-  # sample characterisitc has doubious value.
+  # sample characteristic has dubious value.
   write_tsv(
     geo[[inme]]$sample_characteristics,
     path = str_c(out_data, inme, "_sample_characteristics.tsv")
@@ -98,10 +91,10 @@ for(inme in nme){
 # The corrected files have the suffix "_cleaned"
 
 # Manual formatting performed:
-# 1. Changing charcteristic names (column names)
-# 2. Correcting mis-alinged samples_characterisitcs spreadsheet-cells due to
+# 1. Changing characteristic names (column names)
+# 2. Correcting mis-aligned samples_characteristics spreadsheet-cells due to
 #     missingness.
-# 3. Removing the concatenated characterisitcs name to each value.
+# 3. Seperating the concatenated characteristics name to each value.
 
 #
 # ==============================================================================
@@ -145,29 +138,33 @@ length(geo) # 44
 
 
 # 4. Backup: Unexpected behaviours or  bugs in format_geo() which are resolved.
-# Kept it as a back up
+#    Kept it as a back up.
 # ==============================================================================
 
+
 # GSE6861
-# >>>>>>>>>>
-# Issue: Sample charactristic column doesn't follow the usual format of
+# >>>>>>>
+#
+# Issue: Sample characteristic column doesn't follow the usual format of
 # "characteristic name : characteristic value". Hence the column name in
 # GSE6861$sample_characteristics is the first value of the
-# characterisitic value vector".
+# characteristic value vector".
 # !!!!! This scenario is a bug, fix it, if no ":", generate custom column names, v1,v2 etc
 
+
 # GSE20271
-# >>>>>>>>>>>
-# Issue1: The sample characteristic colum with values "dlda30 pred (1=pcr, 0=rd): 1"
+# >>>>>>>>
+#
+# Issue1: The sample characteristic column with values "dlda30 pred (1=pcr, 0=rd): 1"
 # did not parse correctly. The values are empty in the parsed column.
 # This is due to the fact that the parenthesis in the column name are special characters
 # The split pattern uses column name to split. This is clearly a bug, and can be fixed by
 # use only the ":" as pattern for split.
 
-# Issue2: The sample characteristic colum with values "post chemo +ln/total: 0/12"
+# Issue2: The sample characteristic column with values "post chemo +ln/total: 0/12"
 # although would parse correctly, the forward slash (or a  dash) would be interpreted as
-#  date by any spreadsheet like sotware.
-#  Its better to not parse it and genrate a var_qc varning instead.
+#  date by any spreadsheet like software.
+#  Its better to not parse it and generate a var_qc warning instead.
 
 # Note !!!!!!!!!
 # The column "post chemo +ln/total" requires computational cleaning
@@ -175,20 +172,25 @@ length(geo) # 44
 
 
 # GSE25066
-# >>>>>>>>>
+# >>>>>>>>
+#
 # Comment !!!
 # Introduced a new column "type_taxane". Which is hide under "drfs_even_time_years"
 # column
 
+
 # GSE41998
 # >>>>>>>>
+#
 # Comment !!!!
 # If NAs present in sample characteristics column, var_qc will fail.
-# NA values should present as "charactristic name : NA", to pass var_qc check.
+# NA values should present as "characteristic name : NA", to pass var_qc check.
+
 
 # GSE75685
-# >>>>>>>>>>>
-# The coulmns "rna 260/280 (nanodrop)"	and "rna 260/230 (nanodrop)" hase the issue
+# >>>>>>>>
+#
+# The columns "rna 260/280 (nanodrop)"	and "rna 260/230 (nanodrop)" has the issue
 # same as issue1 of GSE20271.
 #
 # End of backup notes
