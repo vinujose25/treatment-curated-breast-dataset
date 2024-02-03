@@ -886,49 +886,240 @@ global_gene_scaling <- function(x){
 
 }
 
-# # Testing gene_scaling_per_dataset() and gene_scaling_pooled_dataset()
-# # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#
-# x <- matrix(data = 1:50, nrow = 5, ncol = 10, byrow = T)
-# colnames(x) = paste("s",1:10, sep="")
-# rownames(x) = paste("gene",1:5,sep="")
-# x <- as_tibble(x, rownames = "Ncbi_gene_id")
-# #   Ncbi_gene_id    s1    s2    s3    s4    s5    s6    s7    s8    s9   s10
-# # 1 gene1            1     2     3     4     5     6     7     8     9    10
-# # 2 gene2           11    12    13    14    15    16    17    18    19    20
-# # 3 gene3           21    22    23    24    25    26    27    28    29    30
-# # 4 gene4           31    32    33    34    35    36    37    38    39    40
-# # 5 gene5           41    42    43    44    45    46    47    48    49    50
-# dataset_map <- tibble(Series_matrix_accession = c(rep("series1",3),
-#                                                   rep("series2",4),
-#                                                   rep("series3",3)),
-#                       Sample_geo_accession = names(x)[-1])
-# #   Series_matrix_accession Sample_geo_accession
-# # 1 series1                 s1
-# # 2 series1                 s2
-# # 3 series1                 s3
-# # 4 series2                 s4
-# # 5 series2                 s5
-# # 6 series2                 s6
-# # 7 series2                 s7
-# # 8 series1                 s8
-# # 9 series1                 s9
-# # 10 series1                 s10
-#
-# dataset_gene_scaling(x = x, dataset_map = dataset_map)
-# #   Ncbi_gene_id      s1    s2    s3      s4    s5    s6    s7      s8    s9   s10
-# # 1 gene1        -0.0263 0.500  1.03 -0.0263 0.325 0.675  1.03 -0.0263 0.5    1.03
-# # 2 gene2        -0.0263 0.5    1.03 -0.0263 0.325 0.675  1.03 -0.0263 0.5    1.03
-# # 3 gene3        -0.0263 0.500  1.03 -0.0263 0.325 0.675  1.03 -0.0263 0.500  1.03
-# # 4 gene4        -0.0263 0.500  1.03 -0.0263 0.325 0.675  1.03 -0.0263 0.500  1.03
-# # 5 gene5        -0.0263 0.5    1.03 -0.0263 0.325 0.675  1.03 -0.0263 0.5    1.03
-#
-# global_gene_scaling(x = x)
-# #   Ncbi_gene_id      s1     s2    s3    s4    s5    s6    s7    s8    s9   s10
-# # 1 gene1        -0.0263 0.0906 0.208 0.325 0.442 0.558 0.675 0.792 0.909  1.03
-# # 2 gene2        -0.0263 0.0906 0.208 0.325 0.442 0.558 0.675 0.792 0.909  1.03
-# # 3 gene3        -0.0263 0.0906 0.208 0.325 0.442 0.558 0.675 0.792 0.909  1.03
-# # 4 gene4        -0.0263 0.0906 0.208 0.325 0.442 0.558 0.675 0.792 0.909  1.03
-# # 5 gene5        -0.0263 0.0906 0.208 0.325 0.442 0.558 0.675 0.792 0.909  1.03
-# # >>>>>>>>>>>>>>>>>>>>>>
+explore_na <- function(xx){
+  #Function to explore NAs in an expression matrix per gene and per sample
+  #xx: expresison matrix tibble; first column ID_REF contains probeset ids
+  print("sample")
+  idx_sample <- purrr::map_lgl(xx, ~(any(is.na(.x))))
+  print("gene")
+  idx_gene <- purrr::map_lgl(t(xx) %>% as_tibble(), ~(any(is.na(.x))))
+
+  return(list(na_sample = idx_sample, na_gene = idx_gene))
+}
+
+get_patient_summary <- function(xx1){
+
+  # Function to generate patient summary
+
+  bind_rows(
+
+    # Age
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Age<=50"),
+        (xx1$Age <= 50) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Age<=50",
+              "cat" = "NA",
+              n = xx1$Age %>% is.na() %>% sum())
+    ),
+
+    # Grade
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Grade"),
+        xx1$Grade %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Grade",
+              "cat" = "NA",
+              n = xx1$Grade %>% is.na() %>% sum())
+    ),
+
+
+    # Node
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Node"),
+        (xx1$Node_bin) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Node",
+              "cat" = "NA",
+              n = xx1$Node_bin %>% is.na() %>% sum())
+    ),
+
+    # Size
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Size"),
+        (xx1$Size_cat) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Size",
+              "cat" = "NA",
+              n = xx1$Size_cat %>% is.na() %>% sum())
+    ),
+
+
+    # ER
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "ER"),
+        (xx1$Er) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "ER",
+              "cat" = "NA",
+              n = xx1$Er %>% is.na() %>% sum())
+    ),
+
+    # PR
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "PR"),
+        (xx1$Pr) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "PR",
+              "cat" = "NA",
+              n = xx1$Pr %>% is.na() %>% sum())
+    ),
+
+    # HR
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "HR"),
+        (xx1$Hr) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "HR",
+              "cat" = "NA",
+              n = xx1$Hr %>% is.na() %>% sum())
+    ),
+
+    # HER2
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "HER2"),
+        (xx1$Her2) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "HER2",
+              "cat" = "NA",
+              n = xx1$Her2 %>% is.na() %>% sum())
+    ),
+
+    # Subtype IHC
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Subtype IHC"),
+        (xx1$Subtype_ihc) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Subtype IHC",
+              "cat" = "NA",
+              n = xx1$Subtype_ihc %>% is.na() %>% sum())
+    ),
+
+    # Subtype PAM50
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Subtype PAM50"),
+        (xx1$Subtype_pam50) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Subtype PAM50",
+              "cat" = "NA",
+              n = xx1$Subtype_pam50 %>% is.na() %>% sum())
+    ),
+
+
+    # pCR
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "pCR"),
+        xx1 %>% group_by(cat = Response) %>% summarise(n = n())
+        # The below code will throw error when all Response == NA, if regimen = adj
+        # (xx1$Response) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "pCR",
+              "cat" = "NA",
+              n = xx1$Response %>% is.na() %>% sum())
+    ) %>% na.omit(),
+
+    # DFS
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "DFS"),
+        (xx1$Event_dfs) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "DFS",
+              "cat" = "NA",
+              n = xx1$Event_dfs %>% is.na() %>% sum())
+    ) %>%
+      dplyr::mutate(cat = cat %>%
+                      str_replace("0", "no-event") %>%
+                      str_replace("1", "event")),
+
+    # Arm_chemo
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Arm_chemo"),
+        (xx1$Arm_chemo) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Arm_chemo",
+              "cat" = "NA",
+              n = xx1$Arm_chemo %>% is.na() %>% sum())
+    ),
+
+    # Arm_her2
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Arm_her2"),
+        (xx1$Arm_her2) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Arm_her2",
+              "cat" = "NA",
+              n = xx1$Arm_her2 %>% is.na() %>% sum())
+    ),
+
+    # Arm_hormone
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Arm_hormone"),
+        (xx1$Arm_hormone) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Arm_hormone",
+              "cat" = "NA",
+              n = xx1$Arm_hormone %>% is.na() %>% sum())
+    ),
+
+    # Arm_other
+    bind_rows(
+      # non-NAs
+      bind_cols(
+        tibble(variable = "Arm_other"),
+        (xx1$Arm_other) %>% table() %>% as_tibble() %>% dplyr::rename(cat = ".")
+      ),
+      # NAs
+      tibble( variable = "Arm_other",
+              "cat" = "NA",
+              n = xx1$Arm_other %>% is.na() %>% sum())
+    )
+  )
+}
+
+
 

@@ -152,17 +152,6 @@ for(inme in names(geo)){
 
 
 
-explore_na <- function(xx){
-  #xx expresison matrix tibble; first column ID_REF contains probeset ids
-  print("sample")
-  idx_sample <- purrr::map_lgl(xx, ~(any(is.na(.x))))
-  print("gene")
-  idx_gene <- purrr::map_lgl(t(xx) %>% as_tibble(), ~(any(is.na(.x))))
-
-  return(list(na_sample = idx_sample, na_gene = idx_gene))
-}
-
-
 # Names of expression data with NAs
 nme <- c("GSE130786", "GSE21997_GPL1390", "GSE21997_GPL5325", "GSE21997_GPL7504",
          "GSE22226_GPL1708", "GSE22226_GPL4133", "GSE22358", "GSE31863",
