@@ -70,7 +70,7 @@ library(xlsx) # write.xlsx wrirte xlsx files in multiple sheets
 
 # Private
 
-source("src/r/functions.R")
+source("code/r/functions.R")
 
 
 #
